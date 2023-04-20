@@ -42,10 +42,16 @@ func NewClient(token string) (*Client, error) {
 	return &Client{Token: token}, nil
 }
 func (c Client) getContentToSend(messages []Message) string {
+	leadingMap := map[string]string{
+		"system":    "Instructions",
+		"user":      "User",
+		"assistant": "Assistant",
+	}
 	content := ""
 	for _, message := range messages {
-		content += message.Content + "\n\n"
+		content += "||>" + leadingMap[message.Role] + ":\n" + message.Content + "\n"
 	}
+	content += "||>Assistant:\n"
 	util.Logger.Debug("Generated content to send: " + content)
 	return content
 }
