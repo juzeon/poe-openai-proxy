@@ -2,6 +2,8 @@
 
 这是一个包装器，让你可以使用反向工程的 Python 库 `poe-api` 作为 OpenAI API for ChatGPT 的接口。你可以将你喜欢的基于 OpenAI API 的应用程序连接到这个代理，免费享受 ChatGPT API 的功能！
 
+[Poe.com](https://poe.com/) 是一个免费的网页应用，让你可以和 GPT 模型聊天。`poe-api` 是一个 Python 库，它反向工程了 `poe.com`，所以你可以用 Python 来调用 `poe`。这个项目是一个围绕 `poe-api` 的包装器，让它可以通过一个 HTTP API 来访问，这个 API 模仿了官方的 OpenAI API for ChatGPT，所以它可以和其他使用 OpenAI API for ChatGPT 的程序兼容。
+
 ## 安装
 
 1. 将这个仓库克隆到你的本地机器：

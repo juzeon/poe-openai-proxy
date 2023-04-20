@@ -2,6 +2,8 @@
 
 A wrapper that lets you use the reverse-engineered Python library `poe-api` as if it was the OpenAI API for ChatGPT. You can connect your favorite OpenAI API based apps to this proxy and enjoy the ChatGPT API for free!
 
+[Poe.com](https://poe.com/) from Quora is a free web app that lets you chat with GPT models. `poe-api` is a Python library that reverse-engineered `poe.com` so you can use Python to call `poe`. This project is a wrapper around `poe-api` that makes it accessible through an HTTP API, which mimics the official OpenAI API for ChatGPT so it can work with other programs that use OpenAI API for their features.
+
 [简体中文](README_zh.md)
 
 ## Installation
