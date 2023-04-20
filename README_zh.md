@@ -11,13 +11,13 @@ git clone https://github.com/juzeon/poe-openai-proxy.git
 cd poe-openai-proxy/
 ```
 
-2. 安装 `poe-api` 库的 python 依赖项：
+2. 安装 requirements.txt 中的依赖项：
 
 ```
 pip install -r requirements.txt
 ```
 
-3. 根据注释中的说明编辑配置文件：
+3. 在项目根目录新建配置文件，并根据注释中的说明修改配置文件：
 
 ```
 vim config.toml
@@ -36,10 +36,9 @@ tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 gateway = "http://127.0.0.1:5000"
 ```
 
-4. 安装 requirements.txt 中的依赖项并启动 `poe-api` 的 Python 后端：
+4. 启动 `poe-api` 的 Python 后端：
 
 ```
-
 pip install -r requirements.txt
 python external/api.py # 在端口 5000 上运行
 ```
@@ -47,7 +46,6 @@ python external/api.py # 在端口 5000 上运行
 5. 构建并启动 Go 后端：
 
 ```
-
 go build
 chmod +x poe-openai-proxy
 ./poe-openai-proxy

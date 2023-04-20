@@ -13,13 +13,13 @@ git clone https://github.com/juzeon/poe-openai-proxy.git
 cd poe-openai-proxy/
 ```
 
-2. Install the python requirements for the `poe-api` library:
+2. Install dependencies from requirements.txt:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Edit the configuration file according to the instructions in the comments:
+3. Create the configuration file in the root folder of the project according to the instructions in the comments:
 
 ```bash
 vim config.toml
@@ -39,10 +39,9 @@ gateway = "http://127.0.0.1:5000"
 
 ```
 
-4. Install dependencies from requirements.txt and start the Python backend for `poe-api`:
+4. Start the Python backend for `poe-api`:
 
 ```bash
-pip install -r requirements.txt
 python external/api.py # Running on port 5000
 ```
 
