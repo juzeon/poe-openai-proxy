@@ -18,10 +18,11 @@ func Setup(engine *gin.Engine) {
 			return
 		}
 		client := poe.GetClient()
-		util.Logger.Info("use client: " + client.Token)
 		if req.Stream {
+			util.Logger.Info("stream using client: " + client.Token)
 			Stream(c, req, client)
 		} else {
+			util.Logger.Info("ask using client: " + client.Token)
 			Ask(c, req, client)
 		}
 	})
@@ -59,13 +60,13 @@ func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 			Object:  "chat.completion.chunk",
 		}
 		dataV, _ := json.Marshal(&data)
-		_, err := io.WriteString(w, "data: "+string(dataV)+"\n\n")
+		_, err := io.WriteString(w, "data: "+string(dataV)+"\r\n\r\n")
 		if err != nil {
 			util.Logger.Error(err)
 		}
 		flusher.Flush()
 		if done {
-			_, err := io.WriteString(w, "data: "+string("[DONE]")+"\n\n")
+			_, err := io.WriteString(w, "data: "+string("[DONE]")+"\r\n\r\n")
 			if err != nil {
 				util.Logger.Error(err)
 			}
