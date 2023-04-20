@@ -66,3 +66,7 @@ chmod +x poe-openai-proxy
 | stream   | 你可以像在官方 API 中一样使用这个参数。              |
 
 其他参数将被忽略。
+
+## 感谢
+
+<https://github.com/ading2210/poe-api>

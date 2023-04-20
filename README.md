@@ -1,6 +1,6 @@
 # poe-openai-proxy
 
-A wrapper that lets you use the reverse-engineered Python library `poe-api` library as if it was the OpenAI API for ChatGPT. You can connect your favorite OpenAI API based apps to this proxy and enjoy the ChatGPT API for free!
+A wrapper that lets you use the reverse-engineered Python library `poe-api` as if it was the OpenAI API for ChatGPT. You can connect your favorite OpenAI API based apps to this proxy and enjoy the ChatGPT API for free!
 
 [简体中文](README_zh.md)
 
@@ -68,3 +68,7 @@ Supported parameters:
 | stream    | You can use this as in the official API.                               |
 
 Other parameters will be ignored.
+
+## Credit
+
+<https://github.com/ading2210/poe-api>
