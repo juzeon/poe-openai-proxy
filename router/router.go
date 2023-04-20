@@ -3,10 +3,10 @@ package router
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/juzeon/poe-openai-proxy/poe"
+	"github.com/juzeon/poe-openai-proxy/util"
 	"io"
 	"net/http"
-	"poe-openai-proxy/poe"
-	"poe-openai-proxy/util"
 	"time"
 )
 

@@ -1,4 +1,4 @@
-module poe-openai-proxy
+module github.com/juzeon/poe-openai-proxy
 
 go 1.19
 
