@@ -36,6 +36,9 @@ tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 
 # poe-api 的 Python 后端的网关 url。除非你修改了 external/api.py，否则不要改变这个
 gateway = "http://127.0.0.1:5000"
+
+# poe 上 bot 的名字，capybara 即 Sage
+bot = "capybara"
 ```
 
 4. 启动 `poe-api` 的 Python 后端：

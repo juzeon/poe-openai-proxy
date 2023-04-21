@@ -39,6 +39,9 @@ tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 # The gateway url for the Python backend of poe-api. Don't change this unless you modify external/api.py
 gateway = "http://127.0.0.1:5000"
 
+# The bot name to use from poe. `capybara` stands for `Sage`
+bot = "capybara"
+
 ```
 
 4. Start the Python backend for `poe-api`:

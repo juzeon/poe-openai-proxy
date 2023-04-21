@@ -39,8 +39,9 @@ def add_token():
 @app.route('/ask', methods=['GET', 'POST'])
 def ask():
     token = request.form['token']
+    bot = request.form['bot']
     content = request.form['content']
-    for chunk in client_dict[token].send_message("chinchilla", content, with_chat_break=True):
+    for chunk in client_dict[token].send_message(bot, content, with_chat_break=True):
         pass
     return chunk["text"].strip()
 
@@ -48,8 +49,9 @@ def ask():
 @sock.route('/stream')
 def stream(ws):
     token = ws.receive()
+    bot = ws.receive()
     content = ws.receive()
-    for chunk in client_dict[token].send_message("chinchilla", content, with_chat_break=True):
+    for chunk in client_dict[token].send_message(bot, content, with_chat_break=True):
         ws.send(chunk["text_new"])
     ws.close()
 

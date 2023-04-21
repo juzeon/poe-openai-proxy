@@ -10,6 +10,7 @@ type ConfigStruct struct {
 	Port    int      `toml:"port"`
 	Tokens  []string `toml:"tokens"`
 	Gateway string   `toml:"gateway"`
+	Bot     string   `toml:"bot"`
 }
 
 func (c ConfigStruct) GetGatewayWsURL() string {

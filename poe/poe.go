@@ -66,6 +66,10 @@ func (c Client) Stream(messages []Message) (<-chan string, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = conn.WriteMessage(websocket.TextMessage, []byte(conf.Conf.Bot))
+	if err != nil {
+		return nil, err
+	}
 	err = conn.WriteMessage(websocket.TextMessage, []byte(content))
 	if err != nil {
 		return nil, err
@@ -91,6 +95,7 @@ func (c Client) Ask(messages []Message) (*Message, error) {
 	content := c.getContentToSend(messages)
 	resp, err := httpClient.R().SetFormData(map[string]string{
 		"token":   c.Token,
+		"bot":     conf.Conf.Bot,
 		"content": content,
 	}).Post("/ask")
 	if err != nil {
