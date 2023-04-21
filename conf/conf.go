@@ -7,10 +7,11 @@ import (
 )
 
 type ConfigStruct struct {
-	Port    int      `toml:"port"`
-	Tokens  []string `toml:"tokens"`
-	Gateway string   `toml:"gateway"`
-	Bot     string   `toml:"bot"`
+	Port          int      `toml:"port"`
+	Tokens        []string `toml:"tokens"`
+	Gateway       string   `toml:"gateway"`
+	Bot           string   `toml:"bot"`
+	SimulateRoles bool     `toml:"simulate-roles"`
 }
 
 func (c ConfigStruct) GetGatewayWsURL() string {

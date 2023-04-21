@@ -42,6 +42,14 @@ gateway = "http://127.0.0.1:5000"
 
 # poe 上 bot 的名字，capybara 即 Sage
 bot = "capybara"
+
+# 若设置为true，将用前缀prompt来管理角色
+# 例如：
+# ||>User:
+# Hello!
+# ||Assistant:
+# Hello! How can I assist you today?
+simulate-roles = true
 ```
 
 4. 启动 `poe-api` 的 Python 后端：

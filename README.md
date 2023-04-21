@@ -45,6 +45,13 @@ gateway = "http://127.0.0.1:5000"
 # The bot name to use from poe. `capybara` stands for `Sage`
 bot = "capybara"
 
+# Use leading prompts to indicate roles if enabled
+# Example: 
+# ||>User:
+# Hello!
+# ||Assistant:
+# Hello! How can I assist you today?
+simulate-roles = true
 ```
 
 4. Start the Python backend for `poe-api`:
