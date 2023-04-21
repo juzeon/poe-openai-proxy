@@ -45,7 +45,7 @@ gateway = "http://127.0.0.1:5000"
 # The bot name to use from poe. `capybara` stands for `Sage`
 bot = "capybara"
 
-# Use leading prompts to indicate roles if enabled
+# Use leading prompts to indicate roles if enabled. You'd better disable it if you are using tools like https://github.com/TheR1D/shell_gpt
 # Example: 
 # ||>User:
 # Hello!

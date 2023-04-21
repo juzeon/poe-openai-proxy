@@ -43,7 +43,7 @@ gateway = "http://127.0.0.1:5000"
 # poe 上 bot 的名字，capybara 即 Sage
 bot = "capybara"
 
-# 若设置为true，将用前缀prompt来管理角色
+# 若设置为true，将用前缀prompt来管理角色。如果您使用类似于 https://github.com/TheR1D/shell_gpt 的工具，最好禁用它
 # 例如：
 # ||>User:
 # Hello!
