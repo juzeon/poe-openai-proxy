@@ -36,6 +36,9 @@ port = 3700
 # A list of poe tokens. You can get them from the cookies on poe.com, they look like this: p-b=fdasac5a1dfa6%3D%3D
 tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 
+# The proxy that will be used to connect to poe.com. Leave it blank if you do not use a proxy
+proxy = "socks5h://127.0.0.1:7890"
+
 # The gateway url for the Python backend of poe-api. Don't change this unless you modify external/api.py
 gateway = "http://127.0.0.1:5000"
 

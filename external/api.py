@@ -1,15 +1,24 @@
 import poe
+import toml
+import os
+import sys
 from flask import Flask, request
 from flask_sock import Sock
 from poe import Client
 
 poe.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 
+file_path = os.path.abspath(sys.argv[0])
+file_dir = os.path.dirname(file_path)
+config_path = os.path.join(file_dir, "..", "config.toml")
+config = toml.load(config_path)
+proxy = config["proxy"]
+
 
 def get_client(token) -> Client:
     try:
         print("Connecting to poe...")
-        client_poe = poe.Client(token)
+        client_poe = poe.Client(token, proxy=None if proxy == "" else proxy)
     except Exception as excp:
         print("Failed to connect to poe due to " + str(excp))
         exit(1)

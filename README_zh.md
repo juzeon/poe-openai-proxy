@@ -34,6 +34,9 @@ port = 3700
 # poe 令牌的列表。你可以从 poe.com 的 cookies 中获取它们，它们看起来像这样：p-b=fdasac5a1dfa6%3D%3D
 tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 
+# 连接到 poe.com 所用的代理，留空代表不使用代理
+proxy = "socks5h://127.0.0.1:7890"
+
 # poe-api 的 Python 后端的网关 url。除非你修改了 external/api.py，否则不要改变这个
 gateway = "http://127.0.0.1:5000"
 
