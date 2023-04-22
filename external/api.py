@@ -16,15 +16,8 @@ proxy = config["proxy"]
 
 
 def get_client(token) -> Client:
-    try:
-        print("Connecting to poe...")
-        client_poe = poe.Client(token, proxy=None if proxy == "" else proxy)
-    except Exception as excp:
-        print("Failed to connect to poe due to " + str(excp))
-        exit(1)
-
-    print("Connected to poe successfully")
-
+    print("Connecting to poe...")
+    client_poe = poe.Client(token, proxy=None if proxy == "" else proxy)
     return client_poe
 
 
@@ -38,9 +31,13 @@ client_dict = {}
 def add_token():
     token = request.form['token']
     if token not in client_dict.keys():
-        c = get_client(token)
-        client_dict[token] = c
-        return "ok"
+        try:
+            c = get_client(token)
+            client_dict[token] = c
+            return "ok"
+        except Exception as exception:
+            print("Failed to connect to poe due to " + str(exception))
+            return "failed: " + str(exception)
     else:
         return "exist"
 
