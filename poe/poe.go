@@ -20,7 +20,8 @@ func Setup() {
 	for _, token := range conf.Conf.Tokens {
 		client, err := NewClient(token)
 		if err != nil {
-			panic(err)
+			util.Logger.Error(err)
+			continue
 		}
 		clients = append(clients, client)
 	}
@@ -129,10 +130,13 @@ func (c Client) Ask(messages []Message) (*Message, error) {
 	}, nil
 }
 
-func GetClient() *Client {
+func GetClient() (*Client, error) {
 	clientLock.Lock()
 	defer clientLock.Unlock()
+	if len(clients) == 0 {
+		return nil, errors.New("no client is available")
+	}
 	client := clients[clientIx%len(clients)]
 	clientIx++
-	return client
+	return client, nil
 }

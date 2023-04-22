@@ -23,7 +23,11 @@ func Setup(engine *gin.Engine) {
 				return
 			}
 		}
-		client := poe.GetClient()
+		client, err := poe.GetClient()
+		if err != nil {
+			c.JSON(500, err)
+			return
+		}
 		if req.Stream {
 			util.Logger.Info("stream using client: " + client.Token)
 			Stream(c, req, client)
