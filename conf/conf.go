@@ -11,7 +11,7 @@ type ConfigStruct struct {
 	Tokens        []string `toml:"tokens"`
 	Gateway       string   `toml:"gateway"`
 	Bot           string   `toml:"bot"`
-	SimulateRoles bool     `toml:"simulate-roles"`
+	SimulateRoles int      `toml:"simulate-roles"`
 }
 
 func (c ConfigStruct) GetGatewayWsURL() string {

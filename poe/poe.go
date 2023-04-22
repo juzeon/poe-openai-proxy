@@ -48,14 +48,29 @@ func (c Client) getContentToSend(messages []Message) string {
 		"assistant": "Assistant",
 	}
 	content := ""
+	var simulateRoles bool
+	switch conf.Conf.SimulateRoles {
+	case 0:
+		simulateRoles = false
+	case 1:
+		simulateRoles = true
+	case 2:
+		if len(messages) == 1 && messages[0].Role == "user" ||
+			len(messages) == 1 && messages[0].Role == "system" ||
+			len(messages) == 2 && messages[0].Role == "system" && messages[1].Role == "user" {
+			simulateRoles = false
+		} else {
+			simulateRoles = true
+		}
+	}
 	for _, message := range messages {
-		if conf.Conf.SimulateRoles {
+		if simulateRoles {
 			content += "||>" + leadingMap[message.Role] + ":\n" + message.Content + "\n"
 		} else {
 			content += message.Content + "\n"
 		}
 	}
-	if conf.Conf.SimulateRoles {
+	if simulateRoles {
 		content += "||>Assistant:\n"
 	}
 	util.Logger.Debug("Generated content to send: " + content)

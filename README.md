@@ -46,12 +46,13 @@ gateway = "http://127.0.0.1:5000"
 bot = "capybara"
 
 # Use leading prompts to indicate roles if enabled. You'd better disable it if you are using tools like https://github.com/TheR1D/shell_gpt
+# 0:disable, 1:enable, 2:auto detect
 # Example: 
 # ||>User:
 # Hello!
 # ||Assistant:
 # Hello! How can I assist you today?
-simulate-roles = true
+simulate-roles = 2
 ```
 
 4. Start the Python backend for `poe-api`:

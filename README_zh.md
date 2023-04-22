@@ -44,12 +44,13 @@ gateway = "http://127.0.0.1:5000"
 bot = "capybara"
 
 # 若设置为true，将用前缀prompt来管理角色。如果您使用类似于 https://github.com/TheR1D/shell_gpt 的工具，最好禁用它
+# 0:启用, 1:禁用, 2:自动识别
 # 例如：
 # ||>User:
 # Hello!
 # ||Assistant:
 # Hello! How can I assist you today?
-simulate-roles = true
+simulate-roles = 2
 ```
 
 4. 启动 `poe-api` 的 Python 后端：
