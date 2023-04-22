@@ -29,6 +29,7 @@ func Setup() {
 
 type Client struct {
 	Token string
+	Usage []time.Time
 }
 
 func NewClient(token string) (*Client, error) {
@@ -40,7 +41,7 @@ func NewClient(token string) (*Client, error) {
 		return nil, errors.New("registering client error: " + err.Error())
 	}
 	util.Logger.Info("registering client: " + resp.String())
-	return &Client{Token: token}, nil
+	return &Client{Token: token, Usage: nil}, nil
 }
 func (c Client) getContentToSend(messages []Message) string {
 	leadingMap := map[string]string{
@@ -136,7 +137,20 @@ func GetClient() (*Client, error) {
 	if len(clients) == 0 {
 		return nil, errors.New("no client is available")
 	}
-	client := clients[clientIx%len(clients)]
-	clientIx++
-	return client, nil
+	for i := 0; i < len(clients); i++ {
+		client := clients[clientIx%len(clients)]
+		clientIx++
+		if len(client.Usage) < conf.Conf.RateLimit {
+			client.Usage = append(client.Usage, time.Now())
+			return client, nil
+		} else {
+			usage := client.Usage[len(client.Usage)-conf.Conf.RateLimit]
+			if time.Since(usage) <= 1*time.Minute {
+				continue
+			}
+			client.Usage = append(client.Usage, time.Now())
+			return client, nil
+		}
+	}
+	return nil, errors.New("rate limit reached")
 }

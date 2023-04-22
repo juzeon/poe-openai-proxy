@@ -53,6 +53,9 @@ bot = "capybara"
 # ||Assistant:
 # Hello! How can I assist you today?
 simulate-roles = 2
+
+# Rate limit. Default to 10 api calls per token in 1 minute
+rate-limit = 10
 ```
 
 4. Start the Python backend for `poe-api`:

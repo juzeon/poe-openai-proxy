@@ -12,6 +12,7 @@ type ConfigStruct struct {
 	Gateway       string   `toml:"gateway"`
 	Bot           string   `toml:"bot"`
 	SimulateRoles int      `toml:"simulate-roles"`
+	RateLimit     int      `toml:"rate-limit"`
 }
 
 func (c ConfigStruct) GetGatewayWsURL() string {
@@ -30,5 +31,14 @@ func Setup() {
 	err = toml.Unmarshal(v, &Conf)
 	if err != nil {
 		panic(err)
+	}
+	if Conf.Port == 0 {
+		Conf.Port = 3700
+	}
+	if Conf.Bot == "" {
+		Conf.Bot = "capybara"
+	}
+	if Conf.RateLimit == 0 {
+		Conf.RateLimit = 10
 	}
 }

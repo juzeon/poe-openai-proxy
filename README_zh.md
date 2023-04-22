@@ -51,6 +51,9 @@ bot = "capybara"
 # ||Assistant:
 # Hello! How can I assist you today?
 simulate-roles = 2
+
+# API调用速率限制，默认对于每个 token，每分钟最多请求10次
+rate-limit = 10
 ```
 
 4. 启动 `poe-api` 的 Python 后端：
