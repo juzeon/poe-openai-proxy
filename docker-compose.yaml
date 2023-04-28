@@ -1,0 +1,17 @@
+version: '3.1'
+
+services:
+  api:
+    build: .
+    ports:
+      - "3700:3700"
+    volumes:
+      - ./config.toml:/app/config.toml
+
+  external:
+    build: ./external
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./config.toml:/config.toml
+      
