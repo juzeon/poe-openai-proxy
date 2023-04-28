@@ -7,6 +7,8 @@ services:
       - "3700:3700"
     volumes:
       - ./config.toml:/app/config.toml
+    depends_on:
+      - external
 
   external:
     build: ./external
@@ -14,4 +16,3 @@ services:
       - "5000:5000"
     volumes:
       - ./config.toml:/config.toml
-      
