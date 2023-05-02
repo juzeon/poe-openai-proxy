@@ -2,16 +2,18 @@ package router
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/juzeon/poe-openai-proxy/poe"
-	"github.com/juzeon/poe-openai-proxy/util"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/juzeon/poe-openai-proxy/poe"
+	"github.com/juzeon/poe-openai-proxy/util"
 )
 
 func Setup(engine *gin.Engine) {
 	engine.POST("/v1/chat/completions", func(c *gin.Context) {
+		SetCORS(c)
 		var req poe.CompletionRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
 			c.JSON(400, "bad request")
@@ -35,6 +37,11 @@ func Setup(engine *gin.Engine) {
 			util.Logger.Info("ask using client: " + client.Token)
 			Ask(c, req, client)
 		}
+	})
+	// OPTIONS /v1/chat/completions
+	engine.OPTIONS("/v1/chat/completions", func(c *gin.Context) {
+		SetCORS(c)
+		c.JSON(200, "")
 	})
 }
 func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
@@ -120,4 +127,12 @@ func Ask(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 			TotalTokens:      0,
 		},
 	})
+}
+
+func SetCORS(c *gin.Context) {
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	c.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+	c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Writer.Header().Set("Access-Control-Max-Age", "86400")
+	c.Writer.Header().Set("Content-Type", "application/json")
 }
