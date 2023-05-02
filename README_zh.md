@@ -16,7 +16,7 @@ cd poe-openai-proxy/
 2. 安装 requirements.txt 中的依赖项：
 
 ```
-pip install -r requirements.txt
+pip install -r external/requirements.txt
 ```
 
 3. 在项目根目录新建配置文件，并根据注释中的说明修改配置文件：
@@ -38,6 +38,7 @@ tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 proxy = "socks5h://127.0.0.1:7890"
 
 # poe-api 的 Python 后端的网关 url。除非你修改了 external/api.py，否则不要改变这个
+# 注意，如果使用了docker，请将此值修改为: http://external:5000
 gateway = "http://127.0.0.1:5000"
 
 # poe 上 bot 的名字，capybara 即 Sage
@@ -54,12 +55,14 @@ simulate-roles = 2
 
 # API调用速率限制，默认对于每个 token，每分钟最多请求10次
 rate-limit = 10
+
+# API调用冷却时间，同一个 token 在 n 秒内不能被重复使用
+cool-down = 3
 ```
 
 4. 启动 `poe-api` 的 Python 后端：
 
 ```
-pip install -r requirements.txt
 python external/api.py # 在端口 5000 上运行
 ```
 
@@ -70,6 +73,10 @@ go build
 chmod +x poe-openai-proxy
 ./poe-openai-proxy
 ```
+
+### Docker 支持
+
+如果要使用 Docker，只需要在按照上面的步骤创建`config.toml`后运行`docker-compose up -d`即可。
 
 ## 使用
 

@@ -18,7 +18,7 @@ cd poe-openai-proxy/
 2. Install dependencies from requirements.txt:
 
 ```bash
-pip install -r requirements.txt
+pip install -r external/requirements.txt
 ```
 
 3. Create the configuration file in the root folder of the project according to the instructions in the comments:
@@ -40,6 +40,7 @@ tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 proxy = "socks5h://127.0.0.1:7890"
 
 # The gateway url for the Python backend of poe-api. Don't change this unless you modify external/api.py
+# Note that if you use docker this value should be changed into: http://external:5000
 gateway = "http://127.0.0.1:5000"
 
 # The bot name to use from poe. `capybara` stands for `Sage`
@@ -56,6 +57,9 @@ simulate-roles = 2
 
 # Rate limit. Default to 10 api calls per token in 1 minute
 rate-limit = 10
+
+# Cool down of seconds. One same token cannot be used more than once in n seconds 
+cool-down = 3
 ```
 
 4. Start the Python backend for `poe-api`:
@@ -71,6 +75,10 @@ go build
 chmod +x poe-openai-proxy
 ./poe-openai-proxy
 ```
+
+### Docker support
+
+If you would like to use docker, just run `docker-compose up -d` after creating `config.toml` according to the instructions above.
 
 ## Usage
 
