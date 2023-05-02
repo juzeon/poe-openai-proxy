@@ -55,6 +55,9 @@ simulate-roles = 2
 
 # API调用速率限制，默认对于每个 token，每分钟最多请求10次
 rate-limit = 10
+
+# API调用冷却时间，同一个 token 在 n 秒内不能被重复使用
+cool-down = 3
 ```
 
 4. 启动 `poe-api` 的 Python 后端：

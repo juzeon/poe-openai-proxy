@@ -13,6 +13,7 @@ type ConfigStruct struct {
 	Bot           string   `toml:"bot"`
 	SimulateRoles int      `toml:"simulate-roles"`
 	RateLimit     int      `toml:"rate-limit"`
+	CoolDown      int      `toml:"cool-down"`
 }
 
 func (c ConfigStruct) GetGatewayWsURL() string {

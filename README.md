@@ -57,6 +57,9 @@ simulate-roles = 2
 
 # Rate limit. Default to 10 api calls per token in 1 minute
 rate-limit = 10
+
+# Cool down of seconds. One same token cannot be used more than once in n seconds 
+cool-down = 3
 ```
 
 4. Start the Python backend for `poe-api`:

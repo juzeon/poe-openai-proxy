@@ -140,6 +140,12 @@ func GetClient() (*Client, error) {
 	for i := 0; i < len(clients); i++ {
 		client := clients[clientIx%len(clients)]
 		clientIx++
+		if len(client.Usage) > 0 {
+			lastUsage := client.Usage[len(client.Usage)-1]
+			if time.Since(lastUsage) < time.Duration(conf.Conf.CoolDown)*time.Second {
+				continue
+			}
+		}
 		if len(client.Usage) < conf.Conf.RateLimit {
 			client.Usage = append(client.Usage, time.Now())
 			return client, nil
