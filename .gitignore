@@ -4,3 +4,4 @@ poe-openai-proxy.exe
 test
 start-poe-api.bat
 start-poe-openai-proxy.bat
+external/__pycache__

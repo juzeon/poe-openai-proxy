@@ -60,6 +60,9 @@ rate-limit = 10
 
 # Cool down of seconds. One same token cannot be used more than once in n seconds 
 cool-down = 3
+
+# Timeout of seconds per response message
+timeout = 200
 ```
 
 4. Start the Python backend for `poe-api`:

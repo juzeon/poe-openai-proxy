@@ -14,6 +14,7 @@ type ConfigStruct struct {
 	SimulateRoles int      `toml:"simulate-roles"`
 	RateLimit     int      `toml:"rate-limit"`
 	CoolDown      int      `toml:"cool-down"`
+	Timeout       int      `toml:"timeout"`
 }
 
 func (c ConfigStruct) GetGatewayWsURL() string {

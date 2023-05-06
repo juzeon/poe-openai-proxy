@@ -16,7 +16,7 @@ var clientIx = 0
 var clientLock = &sync.Mutex{}
 
 func Setup() {
-	httpClient = resty.New().SetBaseURL(conf.Conf.Gateway).SetTimeout(60 * time.Second)
+	httpClient = resty.New().SetBaseURL(conf.Conf.Gateway).SetTimeout(time.Duration(conf.Conf.Timeout) * time.Second)
 	for _, token := range conf.Conf.Tokens {
 		client, err := NewClient(token)
 		if err != nil {

@@ -58,6 +58,9 @@ rate-limit = 10
 
 # API调用冷却时间，同一个 token 在 n 秒内不能被重复使用
 cool-down = 3
+
+# 单个对话请求超时时间秒数
+timeout = 200
 ```
 
 4. 启动 `poe-api` 的 Python 后端：
