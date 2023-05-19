@@ -37,9 +37,13 @@ tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 # 连接到 poe.com 所用的代理，留空代表不使用代理
 proxy = "socks5h://127.0.0.1:7890"
 
-# poe-api 的 Python 后端的网关 url。除非你修改了 external/api.py，否则不要改变这个
+# poe-api 的 Python 后端的网关 url
 # 注意，如果使用了docker，请将此值修改为: http://external:5000
 gateway = "http://127.0.0.1:5000"
+
+# poe-api 的 Python 后端的网关端口
+# 必须和上面 gateway 中指定的端口一致
+gateway-port = 5000
 
 # poe 上 bot 的名字，capybara 即 Sage
 bot = "capybara"

@@ -39,9 +39,13 @@ tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
 # The proxy that will be used to connect to poe.com. Leave it blank if you do not use a proxy
 proxy = "socks5h://127.0.0.1:7890"
 
-# The gateway url for the Python backend of poe-api. Don't change this unless you modify external/api.py
+# The gateway url for the Python backend of poe-api.
 # Note that if you use docker this value should be changed into: http://external:5000
 gateway = "http://127.0.0.1:5000"
+
+# The gateway port for the Python backend of poe-api.
+# Must be the same as the port indicated in the `gateway` above.
+gateway-port = 5000
 
 # The bot name to use from poe. `capybara` stands for `Sage`
 bot = "capybara"
