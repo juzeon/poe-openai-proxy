@@ -1,7 +1,8 @@
-﻿.idea
+.idea
 config.toml
 poe-openai-proxy.exe
 test
 start-poe-api.bat
 start-poe-openai-proxy.bat
 external/__pycache__
+/poe-openai-proxy
