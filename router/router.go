@@ -13,7 +13,15 @@ import (
 )
 
 func Setup(engine *gin.Engine) {
-	engine.POST("/v1/chat/completions", func(c *gin.Context) {
+	getModels := func(c *gin.Context) {
+		SetCORS(c)
+		c.JSON(http.StatusOK, conf.Models)
+	}
+
+	engine.GET("/models", getModels)
+	engine.GET("/v1/models", getModels)
+
+	postCompletions := func(c *gin.Context) {
 		SetCORS(c)
 		var req poe.CompletionRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -38,12 +46,20 @@ func Setup(engine *gin.Engine) {
 			util.Logger.Info("ask using client: " + client.Token)
 			Ask(c, req, client)
 		}
-	})
+	}
+
+	engine.POST("/chat/completions", postCompletions)
+	engine.POST("/v1/chat/completions", postCompletions)
+
 	// OPTIONS /v1/chat/completions
-	engine.OPTIONS("/v1/chat/completions", func(c *gin.Context) {
+
+	optionsCompoetions := func(c *gin.Context) {
 		SetCORS(c)
 		c.JSON(200, "")
-	})
+	}
+
+	engine.OPTIONS("/chat/completions", optionsCompoetions)
+	engine.OPTIONS("/v1/chat/completions", optionsCompoetions)
 }
 func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 	c.Writer.Header().Set("Content-Type", "text/event-stream")
@@ -53,27 +69,34 @@ func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 	flusher, _ := w.(http.Flusher)
 	ticker := time.NewTimer(time.Duration(conf.Conf.Timeout) * time.Second)
 	defer ticker.Stop()
-	channel, err := client.Stream(req.Messages)
+	channel, err := client.Stream(req.Messages, req.Model)
 	if err != nil {
 		c.JSON(500, err.Error())
 		return
 	}
-	createSSEResponse := func(role string, content string, done bool) {
-		finishReason := ""
+
+	conversationID := "chatcmpl-" + util.RandStringRunes(29)
+
+	createSSEResponse := func(content string, haveRole bool) {
+		done := content == "[DONE]"
+		var finishReason *string
+		delta := map[string]string{}
 		if done {
-			finishReason = "stop"
+			_str := "stop"
+			finishReason = &_str
+		} else if (haveRole) {
+			delta["role"] = "assistant"
+		} else {
+			delta["content"] = content
 		}
 		data := poe.CompletionSSEResponse{
 			Choices: []poe.SSEChoice{{
 				Index: 0,
-				Delta: poe.Delta{
-					Role:    role,
-					Content: content,
-				},
+				Delta: delta,
 				FinishReason: finishReason,
 			}},
 			Created: time.Now().Unix(),
-			Id:      "chatcmpl-" + util.RandStringRunes(8),
+			Id:      conversationID,
 			Model:   req.Model,
 			Object:  "chat.completion.chunk",
 		}
@@ -84,14 +107,14 @@ func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 		}
 		flusher.Flush()
 		if done {
-			_, err := io.WriteString(w, "data: "+string("[DONE]")+"\r\n\r\n")
+			_, err := io.WriteString(w, "data: [DONE]")
 			if err != nil {
 				util.Logger.Error(err)
 			}
 			flusher.Flush()
 		}
 	}
-	createSSEResponse("assistant", "", false)
+	createSSEResponse("", true)
 forLoop:
 	for {
 		select {
@@ -99,22 +122,21 @@ forLoop:
 			c.SSEvent("error", "timeout")
 			break forLoop
 		case d := <-channel:
+			createSSEResponse(d, false)
 			if d == "[DONE]" {
-				createSSEResponse("", "", true)
 				break forLoop
 			}
-			createSSEResponse("", d, false)
 		}
 	}
 }
 func Ask(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
-	message, err := client.Ask(req.Messages)
+	message, err := client.Ask(req.Messages, req.Model)
 	if err != nil {
 		c.JSON(500, err.Error())
 		return
 	}
 	c.JSON(200, poe.CompletionResponse{
-		ID:      "chatcmpl-" + util.RandStringRunes(8),
+		ID:      "chatcmpl-" + util.RandStringRunes(29),
 		Object:  "chat.completion",
 		Created: int(time.Now().Unix()),
 		Choices: []poe.Choice{{
