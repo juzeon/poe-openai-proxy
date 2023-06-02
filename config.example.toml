@@ -1,0 +1,56 @@
+# The port number for the proxy service. The proxied OpenAI API endpoint will be: http://localhost:3700/v1/chat/completions
+port = 3700
+
+# A list of poe tokens. You can get them from the cookies on poe.com, they look like this: p-b=fdasac5a1dfa6%3D%3D
+tokens = ["fdasac5a1dfa6%3D%3D"]
+
+# The proxy that will be used to connect to poe.com. Leave it blank if you do not use a proxy
+proxy = ""
+
+# The gateway url for the Python backend of poe-api.
+# Note that if you use docker this value should be changed into: http://external:5100
+gateway = "http://localhost:5100"
+
+# The gateway port for the Python backend of poe-api.
+# Must be the same as the port indicated in the `gateway` above.
+gateway-port = 5100
+
+
+# Use leading prompts to indicate roles if enabled. You'd better disable it if you are using tools like https://github.com/TheR1D/shell_gpt
+# 0:disable, 1:enable, 2:auto detect
+# Example:
+# ||>User:
+# Hello!
+# ||Assistant:
+# Hello! How can I assist you today?
+simulate-roles = 2
+
+# Rate limit. Default to 10 api calls per token in 1 minute
+rate-limit = 10
+
+# Cool down of seconds. One same token cannot be used more than once in n seconds
+cool-down = 3
+
+# Timeout of seconds per response message
+timeout = 200
+
+
+# The bot name map to use from poe.
+[bot]
+	"gpt-3.5-turbo" = "chinchilla" # ChatGPT 3.5
+	"gpt-4" = "beaver" # ChatGPT 4
+	"gpt-3.5-turbo-0301" = "a2" # Claude-instant
+	"gpt-4-32k" = "a2_100k" # Claude-instant-100k
+	"gpt-4-0314" = "a2_2" # Claude+
+	"gpt-Sage" = "capybara" # Add `gpt-` prefix for ChatGPT Raycast plugin to pick these up
+	"gpt-ChatGPT" = "chinchilla"
+	"gpt-GPT-4" = "beaver"
+	"gpt-Claude-instant" = "a2"
+	"gpt-Claude-instant-100k" = "a2_100k"
+	"gpt-Claude+" = "a2_2"
+	"Sage" = "capybara"
+	"ChatGPT" = "chinchilla"
+	"GPT-4" = "beaver"
+	"Claude-instant" = "a2"
+	"Claude-instant-100k" = "a2_100k"
+	"Claude+" = "a2_2"

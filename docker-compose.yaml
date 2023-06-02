@@ -13,6 +13,6 @@ services:
   external:
     build: ./external
     ports:
-      - "5000:5000"
+      - "5100:5100"
     volumes:
       - ./config.toml:/config.toml

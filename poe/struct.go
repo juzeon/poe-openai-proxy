@@ -35,9 +35,9 @@ type CompletionSSEResponse struct {
 	Object  string      `json:"object"`
 }
 type SSEChoice struct {
-	Delta        Delta  `json:"delta"`
-	FinishReason string `json:"finish_reason"`
-	Index        int    `json:"index"`
+	Delta        map[string]string  `json:"delta"`
+	FinishReason *string            `json:"finish_reason"`
+	Index        int                `json:"index"`
 }
 type Delta struct {
 	Role    string `json:"role"`

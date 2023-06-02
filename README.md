@@ -21,58 +21,17 @@ cd poe-openai-proxy/
 pip install -r external/requirements.txt
 ```
 
-3. Create the configuration file in the root folder of the project according to the instructions in the comments:
+3. Create the configuration file in the root folder of the project. Instructions are written in the comments:
 
 ```bash
+cp config.example.toml comfig.toml
 vim config.toml
-```
-
-config.toml:
-
-```toml
-# The port number for the proxy service. The proxied OpenAI API endpoint will be: http://localhost:3700/v1/chat/completions
-port = 3700
-
-# A list of poe tokens. You can get them from the cookies on poe.com, they look like this: p-b=fdasac5a1dfa6%3D%3D
-tokens = ["fdasac5a1dfa6%3D%3D","d84ef53ad5f132sa%3D%3D"]
-
-# The proxy that will be used to connect to poe.com. Leave it blank if you do not use a proxy
-proxy = "socks5h://127.0.0.1:7890"
-
-# The gateway url for the Python backend of poe-api.
-# Note that if you use docker this value should be changed into: http://external:5000
-gateway = "http://127.0.0.1:5000"
-
-# The gateway port for the Python backend of poe-api.
-# Must be the same as the port indicated in the `gateway` above.
-gateway-port = 5000
-
-# The bot name to use from poe. `capybara` stands for `Sage`
-bot = "capybara"
-
-# Use leading prompts to indicate roles if enabled. You'd better disable it if you are using tools like https://github.com/TheR1D/shell_gpt
-# 0:disable, 1:enable, 2:auto detect
-# Example: 
-# ||>User:
-# Hello!
-# ||Assistant:
-# Hello! How can I assist you today?
-simulate-roles = 2
-
-# Rate limit. Default to 10 api calls per token in 1 minute
-rate-limit = 10
-
-# Cool down of seconds. One same token cannot be used more than once in n seconds 
-cool-down = 3
-
-# Timeout of seconds per response message
-timeout = 200
 ```
 
 4. Start the Python backend for `poe-api`:
 
 ```bash
-python external/api.py # Running on port 5000
+python external/api.py # Running on port 5100
 ```
 
 5. Build and start the Go backend:
@@ -91,13 +50,20 @@ If you would like to use docker, just run `docker-compose up -d` after creating 
 
 See [OpenAI Document](https://platform.openai.com/docs/api-reference/chat/create) for more details on how to use the ChatGPT API.
 
-Just replace `https://api.openai.com/v1/chat/completions` in your code with `http://localhost:3700/v1/chat/completions` and you're good to go.
+Just replace `https://api.openai.com` in your code with `http://localhost:3700` and you're good to go.
+
+Supported routes:
+
+- /models
+- /chat/completions
+- /v1/models
+- /v1/chat/completions
 
 Supported parameters:
 
 | Parameter | Note                                                         |
 | --------- | ------------------------------------------------------------ |
-| model     | It doesn't matter what you pass here, poe will always use `gpt-3.5-turbo`. |
+| model     | See `[bot]` section of `config.example.toml`. Model names are mapped to bot nicknames. |
 | messages  | You can use this as in the official API, except for `name`.            |
 | stream    | You can use this as in the official API.                               |
 
