@@ -67,7 +67,6 @@ func Setup() {
 			"Claude-instant":        "a2",
 			"Claude-instant-100k":   "a2_100k",
 			"Claude+":               "a2_2",
-			"NeevaAI":               "hutia",
 		}
 	}
 
