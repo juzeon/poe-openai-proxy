@@ -101,13 +101,13 @@ func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 			Object:  "chat.completion.chunk",
 		}
 		dataV, _ := json.Marshal(&data)
-		_, err := io.WriteString(w, "data: "+string(dataV)+"\r\n\r\n")
+		_, err := io.WriteString(w, "data: "+string(dataV)+"\n\n")
 		if err != nil {
 			util.Logger.Error(err)
 		}
 		flusher.Flush()
 		if done {
-			_, err := io.WriteString(w, "data: [DONE]")
+			_, err := io.WriteString(w, "data: [DONE]\n\n")
 			if err != nil {
 				util.Logger.Error(err)
 			}

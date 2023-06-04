@@ -41,9 +41,7 @@ sock.init_app(app)
 client_dict = {}
 
 
-@app.route('/add_token', methods=['GET', 'POST'])
-def add_token():
-    token = request.form['token']
+def _add_token(token):
     if token not in client_dict.keys():
         try:
             c = get_client(token)
@@ -55,12 +53,18 @@ def add_token():
     else:
         return "exist"
 
+@app.route('/add_token', methods=['GET', 'POST'])
+def add_token():
+    token = request.form['token']
+    return _add_token(token)
+
 
 @app.route('/ask', methods=['GET', 'POST'])
 def ask():
     token = request.form['token']
     bot = request.form['bot']
     content = request.form['content']
+    _add_token(token)
     for chunk in client_dict[token].send_message(bot, content, with_chat_break=True, timeout=timeout):
         pass
     return chunk["text"].strip()
@@ -71,6 +75,7 @@ def stream(ws):
     token = ws.receive()
     bot = ws.receive()
     content = ws.receive()
+    _add_token(token)
     for chunk in client_dict[token].send_message(bot, content, with_chat_break=True, timeout=timeout):
         ws.send(chunk["text_new"])
     ws.close()
