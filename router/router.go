@@ -67,7 +67,8 @@ func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 	c.Writer.Header().Set("Connection", "keep-alive")
 	w := c.Writer
 	flusher, _ := w.(http.Flusher)
-	ticker := time.NewTimer(time.Duration(conf.Conf.Timeout) * time.Second)
+	timeout := time.Duration(conf.Conf.Timeout) * time.Second
+	ticker := time.NewTimer(timeout)
 	defer ticker.Stop()
 	channel, err := client.Stream(req.Messages, req.Model)
 	if err != nil {
@@ -122,6 +123,7 @@ forLoop:
 			c.SSEvent("error", "timeout")
 			break forLoop
 		case d := <-channel:
+			ticker.Reset(timeout)
 			createSSEResponse(d, false)
 			if d == "[DONE]" {
 				break forLoop
