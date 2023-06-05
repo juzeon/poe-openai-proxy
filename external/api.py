@@ -2,6 +2,7 @@ import poe
 import toml
 import os
 import sys
+import logging
 from flask import Flask, request
 from flask_sock import Sock
 from poe import Client
@@ -21,12 +22,14 @@ poe.headers = {
     "Upgrade-Insecure-Requests": "1"
 }
 
+# poe.logger.setLevel(logging.INFO)
+
 file_path = os.path.abspath(sys.argv[0])
 file_dir = os.path.dirname(file_path)
 config_path = os.path.join(file_dir, "..", "config.toml")
 config = toml.load(config_path)
 proxy = config["proxy"]
-timeout = config["timeout"]
+timeout = config["api-timeout"] or config["timeout"] or 7
 
 
 def get_client(token) -> Client:
@@ -65,9 +68,17 @@ def ask():
     bot = request.form['bot']
     content = request.form['content']
     _add_token(token)
-    for chunk in client_dict[token].send_message(bot, content, with_chat_break=True, timeout=timeout):
-        pass
-    return chunk["text"].strip()
+    client = client_dict[token]
+    try:
+        for chunk in client.send_message(bot, content, with_chat_break=True, timeout=timeout):
+            pass
+        return chunk["text"].strip()
+    except Exception as e:
+        del client_dict[token]
+        client.disconnect_ws()
+        errmsg = f"An exception of type {type(e).__name__} occurred. Arguments: {e.args}"
+        print(errmsg)
+        return errmsg
 
 
 @sock.route('/stream')
@@ -76,9 +87,18 @@ def stream(ws):
     bot = ws.receive()
     content = ws.receive()
     _add_token(token)
-    for chunk in client_dict[token].send_message(bot, content, with_chat_break=True, timeout=timeout):
-        ws.send(chunk["text_new"])
+    client = client_dict[token]
+    try:
+        for chunk in client.send_message(bot, content, with_chat_break=True, timeout=timeout):
+            ws.send(chunk["text_new"])
+    except Exception as e:
+        del client_dict[token]
+        client.disconnect_ws()
+        errmsg = f"An exception of type {type(e).__name__} occurred. Arguments: {e.args}"
+        print(errmsg)
+        ws.send(errmsg)
     ws.close()
+
 
 
 if __name__ == '__main__':

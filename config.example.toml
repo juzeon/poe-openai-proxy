@@ -32,7 +32,8 @@ rate-limit = 10
 cool-down = 3
 
 # Timeout of seconds per response message
-timeout = 200
+timeout = 12
+api-timeout = 7
 
 
 # The bot name map to use from poe.
