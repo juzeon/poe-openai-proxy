@@ -16,7 +16,7 @@ var clientIx = 0
 var clientLock = &sync.Mutex{}
 
 func Setup() {
-	httpClient = resty.New().SetBaseURL(conf.Conf.Gateway).SetTimeout(time.Duration(conf.Conf.Timeout) * time.Second)
+	httpClient = resty.New().SetBaseURL(conf.Conf.Gateway)
 	for _, token := range conf.Conf.Tokens {
 		client, err := NewClient(token)
 		if err != nil {
@@ -113,6 +113,7 @@ func (c Client) Stream(messages []Message, model string) (<-chan string, error) 
 			if err != nil {
 				if !websocket.IsCloseError(err, websocket.CloseNormalClosure) {
 					util.Logger.Error(err)
+					channel <- "\n\n[ERROR] " + err.Error()
 				}
 				channel <- "[DONE]"
 				break

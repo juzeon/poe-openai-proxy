@@ -31,8 +31,12 @@ rate-limit = 10
 # Cool down of seconds. One same token cannot be used more than once in n seconds
 cool-down = 3
 
-# Timeout of seconds per response message
-timeout = 200
+# Timeout of seconds per response chunk
+# This timeout will now reset every time a chunk is received
+# so there's no need for a very large value to compensate for a very long reply
+timeout = 15
+# Timeout for poe-api, usually it should be smaller than timeout
+api-timeout = 12
 
 
 # The bot name map to use from poe.
