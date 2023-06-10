@@ -30,6 +30,7 @@ func Setup() {
 type Client struct {
 	Token string
 	Usage []time.Time
+	Lock  bool
 }
 
 func NewClient(token string) (*Client, error) {
@@ -41,9 +42,9 @@ func NewClient(token string) (*Client, error) {
 		return nil, errors.New("registering client error: " + err.Error())
 	}
 	util.Logger.Info("registering client: " + resp.String())
-	return &Client{Token: token, Usage: nil}, nil
+	return &Client{Token: token, Usage: nil, Lock: false}, nil
 }
-func (c Client) getContentToSend(messages []Message) string {
+func (c *Client) getContentToSend(messages []Message) string {
 	leadingMap := map[string]string{
 		"system":    "Instructions",
 		"user":      "User",
@@ -78,7 +79,7 @@ func (c Client) getContentToSend(messages []Message) string {
 	util.Logger.Debug("Generated content to send: " + content)
 	return content
 }
-func (c Client) Stream(messages []Message, model string) (<-chan string, error) {
+func (c *Client) Stream(messages []Message, model string) (<-chan string, error) {
 	channel := make(chan string, 1024)
 	content := c.getContentToSend(messages)
 	conn, _, err := websocket.DefaultDialer.Dial(conf.Conf.GetGatewayWsURL()+"/stream", nil)
@@ -122,7 +123,7 @@ func (c Client) Stream(messages []Message, model string) (<-chan string, error) 
 	}(conn, channel)
 	return channel, nil
 }
-func (c Client) Ask(messages []Message, model string) (*Message, error) {
+func (c *Client) Ask(messages []Message, model string) (*Message, error) {
 	content := c.getContentToSend(messages)
 
 	bot, ok := conf.Conf.Bot[model]
@@ -145,6 +146,11 @@ func (c Client) Ask(messages []Message, model string) (*Message, error) {
 		Name:    "",
 	}, nil
 }
+func (c *Client) Release() {
+	clientLock.Lock()
+	defer clientLock.Unlock()
+	c.Lock = false
+}
 
 func GetClient() (*Client, error) {
 	clientLock.Lock()
@@ -155,6 +161,9 @@ func GetClient() (*Client, error) {
 	for i := 0; i < len(clients); i++ {
 		client := clients[clientIx%len(clients)]
 		clientIx++
+		if client.Lock {
+			continue
+		}
 		if len(client.Usage) > 0 {
 			lastUsage := client.Usage[len(client.Usage)-1]
 			if time.Since(lastUsage) < time.Duration(conf.Conf.CoolDown)*time.Second {
@@ -163,6 +172,7 @@ func GetClient() (*Client, error) {
 		}
 		if len(client.Usage) < conf.Conf.RateLimit {
 			client.Usage = append(client.Usage, time.Now())
+			client.Lock = true
 			return client, nil
 		} else {
 			usage := client.Usage[len(client.Usage)-conf.Conf.RateLimit]
@@ -170,8 +180,9 @@ func GetClient() (*Client, error) {
 				continue
 			}
 			client.Usage = append(client.Usage, time.Now())
+			client.Lock = true
 			return client, nil
 		}
 	}
-	return nil, errors.New("rate limit reached")
+	return nil, errors.New("no available client")
 }
