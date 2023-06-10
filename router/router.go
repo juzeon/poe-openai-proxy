@@ -53,13 +53,13 @@ func Setup(engine *gin.Engine) {
 
 	// OPTIONS /v1/chat/completions
 
-	optionsCompoetions := func(c *gin.Context) {
+	optionsCompletions := func(c *gin.Context) {
 		SetCORS(c)
 		c.JSON(200, "")
 	}
 
-	engine.OPTIONS("/chat/completions", optionsCompoetions)
-	engine.OPTIONS("/v1/chat/completions", optionsCompoetions)
+	engine.OPTIONS("/chat/completions", optionsCompletions)
+	engine.OPTIONS("/v1/chat/completions", optionsCompletions)
 }
 func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 	c.Writer.Header().Set("Content-Type", "text/event-stream")
@@ -85,15 +85,15 @@ func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 		if done {
 			_str := "stop"
 			finishReason = &_str
-		} else if (haveRole) {
+		} else if haveRole {
 			delta["role"] = "assistant"
 		} else {
 			delta["content"] = content
 		}
 		data := poe.CompletionSSEResponse{
 			Choices: []poe.SSEChoice{{
-				Index: 0,
-				Delta: delta,
+				Index:        0,
+				Delta:        delta,
 				FinishReason: finishReason,
 			}},
 			Created: time.Now().Unix(),
