@@ -24,7 +24,7 @@ pip install -r external/requirements.txt
 3. Create the configuration file in the root folder of the project. Instructions are written in the comments:
 
 ```bash
-cp config.example.toml comfig.toml
+cp config.example.toml config.toml
 vim config.toml
 ```
 
