@@ -14,8 +14,8 @@ cd poe-openai-proxy/
 2. 在项目的根目录创建配置文件。说明写在注释里：
 
 ```bash
-cp config.example.toml comfig.toml
-vim config.toml
+cp .env.example .env
+vim .env
 ```
 
 3. 构建并启动Go后端：
@@ -28,7 +28,7 @@ chmod +x poe-openai-proxy
 
 ### Docker一键部署
 
-如果你想使用docker，只需要在按照上面的说明创建好`config.toml`之后运行`docker-compose up -d`即可。
+如果你想使用docker，只需要在按照上面的说明创建好`.env`之后运行`docker-compose up -d`即可。
 
 ## 使用
 
@@ -47,7 +47,7 @@ chmod +x poe-openai-proxy
 
 | 参数     | 说明                                                         |
 | -------- | ------------------------------------------------------------ |
-| model    | 参见`config.example.toml`里的`[bot]`部分。模型名字对应着机器人昵称。 |
+| model    | 参见`.env.example`里的`[bot]`部分。模型名字对应着机器人昵称。 |
 | messages | 你可以像在官方API里一样使用这个参数，除了`name`。            |
 | stream   | 你可以像在官方API里一样使用这个参数。                               |
 
