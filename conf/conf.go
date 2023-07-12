@@ -13,6 +13,7 @@ type ConfigStruct struct {
 	RateLimit     int               `toml:"rate-limit"`
 	CoolDown      int               `toml:"cool-down"`
 	Timeout       int               `toml:"timeout"`
+	Key           string            `toml:"key"`
 }
 
 type ModelDef struct {
