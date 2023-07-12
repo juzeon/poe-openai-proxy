@@ -2,47 +2,39 @@ package poe
 
 import (
 	"errors"
-	"github.com/go-resty/resty/v2"
-	"github.com/gorilla/websocket"
-	"github.com/juzeon/poe-openai-proxy/conf"
-	"github.com/juzeon/poe-openai-proxy/util"
 	"sync"
 	"time"
+
+	"github.com/juzeon/poe-openai-proxy/conf"
+	"github.com/juzeon/poe-openai-proxy/util"
+	poe_api "github.com/lwydyby/poe-api"
 )
 
-var httpClient *resty.Client
 var clients []*Client
+var clientLock sync.Mutex
 var clientIx = 0
-var clientLock = &sync.Mutex{}
 
 func Setup() {
-	httpClient = resty.New().SetBaseURL(conf.Conf.Gateway)
 	for _, token := range conf.Conf.Tokens {
 		client, err := NewClient(token)
 		if err != nil {
-			util.Logger.Error(err)
-			continue
+			panic(err)
 		}
 		clients = append(clients, client)
 	}
 }
 
 type Client struct {
-	Token string
-	Usage []time.Time
-	Lock  bool
+	Token  string
+	client *poe_api.Client
+	Usage  []time.Time
+	Lock   bool
 }
 
 func NewClient(token string) (*Client, error) {
 	util.Logger.Info("registering client: " + token)
-	resp, err := httpClient.R().SetFormData(map[string]string{
-		"token": token,
-	}).Post("/add_token")
-	if err != nil {
-		return nil, errors.New("registering client error: " + err.Error())
-	}
-	util.Logger.Info("registering client: " + resp.String())
-	return &Client{Token: token, Usage: nil, Lock: false}, nil
+	client := poe_api.NewClient(token, nil)
+	return &Client{Token: token, Usage: nil, Lock: false, client: client}, nil
 }
 func (c *Client) getContentToSend(messages []Message) string {
 	leadingMap := map[string]string{
@@ -82,45 +74,27 @@ func (c *Client) getContentToSend(messages []Message) string {
 func (c *Client) Stream(messages []Message, model string) (<-chan string, error) {
 	channel := make(chan string, 1024)
 	content := c.getContentToSend(messages)
-	conn, _, err := websocket.DefaultDialer.Dial(conf.Conf.GetGatewayWsURL()+"/stream", nil)
-	if err != nil {
-		return nil, err
-	}
-
 	bot, ok := conf.Conf.Bot[model]
 	if !ok {
 		bot = "capybara"
 	}
 	util.Logger.Info("Stream using bot", bot)
-
-	err = conn.WriteMessage(websocket.TextMessage, []byte(c.Token))
+	resp, err := c.client.SendMessage(bot, content, true, time.Duration(conf.Conf.Timeout)*time.Second)
 	if err != nil {
 		return nil, err
 	}
-	err = conn.WriteMessage(websocket.TextMessage, []byte(bot))
-	if err != nil {
-		return nil, err
-	}
-	err = conn.WriteMessage(websocket.TextMessage, []byte(content))
-	if err != nil {
-		return nil, err
-	}
-	go func(conn *websocket.Conn, channel chan string) {
+	go func() {
 		defer close(channel)
-		defer conn.Close()
-		for {
-			_, v, err := conn.ReadMessage()
-			channel <- string(v)
-			if err != nil {
-				if !websocket.IsCloseError(err, websocket.CloseNormalClosure) {
-					util.Logger.Error(err)
-					channel <- "\n\n[ERROR] " + err.Error()
-				}
-				channel <- "[DONE]"
-				break
+		defer func() {
+			if err := recover(); err != nil {
+				channel <- "\n\n[ERROR] " + err.(error).Error()
 			}
+		}()
+		for message := range poe_api.GetTextStream(resp) {
+			channel <- message
 		}
-	}(conn, channel)
+		channel <- "[DONE]"
+	}()
 	return channel, nil
 }
 func (c *Client) Ask(messages []Message, model string) (*Message, error) {
@@ -132,17 +106,13 @@ func (c *Client) Ask(messages []Message, model string) (*Message, error) {
 	}
 	util.Logger.Info("Ask using bot", bot)
 
-	resp, err := httpClient.R().SetFormData(map[string]string{
-		"token":   c.Token,
-		"bot":     bot,
-		"content": content,
-	}).Post("/ask")
+	resp, err := c.client.SendMessage(bot, content, true, time.Duration(conf.Conf.Timeout)*time.Second)
 	if err != nil {
 		return nil, err
 	}
 	return &Message{
 		Role:    "assistant",
-		Content: resp.String(),
+		Content: poe_api.GetFinalResponse(resp),
 		Name:    "",
 	}, nil
 }

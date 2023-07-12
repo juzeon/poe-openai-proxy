@@ -1,20 +1,21 @@
 package conf
 
 import (
-	"github.com/pelletier/go-toml/v2"
 	"os"
 	"strings"
+
+	"github.com/pelletier/go-toml/v2"
 )
 
 type ConfigStruct struct {
-	Port          int      `toml:"port"`
-	Tokens        []string `toml:"tokens"`
-	Gateway       string   `toml:"gateway"`
-	Bot           map[string]string   `toml:"bot"`
-	SimulateRoles int      `toml:"simulate-roles"`
-	RateLimit     int      `toml:"rate-limit"`
-	CoolDown      int      `toml:"cool-down"`
-	Timeout       int      `toml:"timeout"`
+	Port          int               `toml:"port"`
+	Tokens        []string          `toml:"tokens"`
+	Gateway       string            `toml:"gateway"`
+	Bot           map[string]string `toml:"bot"`
+	SimulateRoles int               `toml:"simulate-roles"`
+	RateLimit     int               `toml:"rate-limit"`
+	CoolDown      int               `toml:"cool-down"`
+	Timeout       int               `toml:"timeout"`
 }
 
 type ModelDef struct {
@@ -25,7 +26,7 @@ type ModelDef struct {
 }
 
 type ModelsResp struct {
-	Object string   `json:"object"`
+	Object string     `json:"object"`
 	Data   []ModelDef `json:"data"`
 }
 
@@ -55,18 +56,18 @@ func Setup() {
 		Conf.RateLimit = 10
 	}
 	if Conf.Bot == nil {
-		Conf.Bot = map[string]string {
-			"gpt-3.5-turbo":         "chinchilla",
-			"gpt-4":                 "beaver",
-			"gpt-3.5-turbo-0301":    "a2",
-			"gpt-4-32k":             "a2_100k",
-			"gpt-4-0314":            "a2_2",
-			"Sage":                  "capybara",
-			"ChatGPT":               "chinchilla",
-			"GPT-4":                 "beaver",
-			"Claude-instant":        "a2",
-			"Claude-instant-100k":   "a2_100k",
-			"Claude+":               "a2_2",
+		Conf.Bot = map[string]string{
+			"gpt-3.5-turbo":       "chinchilla",
+			"gpt-4":               "beaver",
+			"gpt-3.5-turbo-0301":  "a2",
+			"gpt-4-32k":           "a2_100k",
+			"gpt-4-0314":          "a2_2",
+			"Sage":                "capybara",
+			"ChatGPT":             "chinchilla",
+			"GPT-4":               "beaver",
+			"Claude-instant":      "a2",
+			"Claude-instant-100k": "a2_100k",
+			"Claude+":             "a2_2",
 		}
 	}
 
@@ -74,8 +75,8 @@ func Setup() {
 
 	for key := range Conf.Bot {
 		Models.Data = append(Models.Data, ModelDef{
-			ID: key,
-			Object: "",
+			ID:      key,
+			Object:  "",
 			Created: 0,
 			OwnedBy: "",
 		})
