@@ -11,14 +11,14 @@ git clone https://github.com/caoyunzhou/poe-openai-proxy.git
 cd poe-openai-proxy/
 ```
 
-1. 在项目的根目录创建配置文件。说明写在注释里：
+2. 在项目的根目录创建配置文件。说明写在注释里：
 
 ```bash
 cp config.example.toml comfig.toml
 vim config.toml
 ```
 
-1. 构建并启动Go后端：
+3. 构建并启动Go后端：
 
 ```bash
 go build
@@ -26,7 +26,7 @@ chmod +x poe-openai-proxy
 ./poe-openai-proxy
 ```
 
-### Docker支持
+### Docker一键部署
 
 如果你想使用docker，只需要在按照上面的说明创建好`config.toml`之后运行`docker-compose up -d`即可。
 
@@ -55,6 +55,6 @@ chmod +x poe-openai-proxy
 
 ## 致谢
 
-<https://github.com/ading2210/poe-api>
-<github.com/lwydyby/poe-api>
-<github.com/juzeon/poe-openai-proxy>
+- <https://github.com/ading2210/poe-api>
+- <https://github.com/juzeon/poe-openai-proxy>
+- <https://github.com/lwydyby/poe-api>
