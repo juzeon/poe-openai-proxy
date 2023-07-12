@@ -53,6 +53,17 @@ chmod +x poe-openai-proxy
 
 其他参数会被忽略。
 
+## 配置域名后使用方式
+```
+curl --location 'https://poe.aivvm.com/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--data '{
+  "model": "gpt-4",
+  "messages": [{"role": "user", "content": "你好"}]
+}'
+```
+
+
 ## 致谢
 
 - <https://github.com/ading2210/poe-api>

@@ -65,10 +65,10 @@ func Setup() {
 
 	Conf.Port = loadEnvVarAsInt("PORT", 8080)
 	Conf.Tokens = loadEnvVarAsSlice("TOKENS")
-	Conf.SimulateRoles = loadEnvVarAsInt("SIMULATE_ROLES", 0)
+	Conf.SimulateRoles = loadEnvVarAsInt("SIMULATE_ROLES", 2)
 	Conf.RateLimit = loadEnvVarAsInt("RATE_LIMIT", 10)
 	Conf.CoolDown = loadEnvVarAsInt("COOL_DOWN", 5)
-	Conf.Timeout = loadEnvVarAsInt("TIMEOUT", 0)
+	Conf.Timeout = loadEnvVarAsInt("TIMEOUT", 60)
 
 	Conf.Bot = map[string]string{
 		"gpt-3.5-turbo":       "chinchilla",
