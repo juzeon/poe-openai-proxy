@@ -1,40 +1,24 @@
 # poe-openai-proxy
 
-A wrapper that lets you use the reverse-engineered Python library `poe-api` as if it was the OpenAI API for ChatGPT. You can connect your favorite OpenAI API based apps to this proxy and enjoy the ChatGPT API for free!
+[Poe.com](https://poe.com/) 是一个免费的网页应用，让你可以和 GPT 模型聊天。`poe-api` 它反向工程了 `poe.com`，让它可以通过一个 HTTP API 来访问，这个 API 模仿了官方的 OpenAI API for ChatGPT，所以它可以和其他使用 OpenAI API for ChatGPT 的程序兼容。
 
-[Poe.com](https://poe.com/) from Quora is a free web app that lets you chat with GPT models. `poe-api` is a Python library that reverse-engineered `poe.com` so you can use Python to call `poe`. This project is a wrapper around `poe-api` that makes it accessible through an HTTP API, which mimics the official OpenAI API for ChatGPT so it can work with other programs that use OpenAI API for their features.
+## 安装
 
-[简体中文](README_zh.md)
+1. 将这个仓库克隆到你的本地机器：
 
-## Installation
-
-1. Clone this repository to your local machine:
-
-```bash
-git clone https://github.com/juzeon/poe-openai-proxy.git
+```
+git clone https://github.com/caoyunzhou/poe-openai-proxy.git
 cd poe-openai-proxy/
 ```
 
-2. Install dependencies from requirements.txt:
+1. 在项目的根目录创建配置文件。说明写在注释里：
 
 ```bash
-pip install -r external/requirements.txt
-```
-
-3. Create the configuration file in the root folder of the project. Instructions are written in the comments:
-
-```bash
-cp config.example.toml config.toml
+cp config.example.toml comfig.toml
 vim config.toml
 ```
 
-4. Start the Python backend for `poe-api`:
-
-```bash
-python external/api.py # Running on port 5100
-```
-
-5. Build and start the Go backend:
+1. 构建并启动Go后端：
 
 ```bash
 go build
@@ -42,33 +26,35 @@ chmod +x poe-openai-proxy
 ./poe-openai-proxy
 ```
 
-### Docker support
+### Docker支持
 
-If you would like to use docker, just run `docker-compose up -d` after creating `config.toml` according to the instructions above.
+如果你想使用docker，只需要在按照上面的说明创建好`config.toml`之后运行`docker-compose up -d`即可。
 
-## Usage
+## 使用
 
-See [OpenAI Document](https://platform.openai.com/docs/api-reference/chat/create) for more details on how to use the ChatGPT API.
+参见[OpenAI文档](https://platform.openai.com/docs/api-reference/chat/create)了解更多关于如何使用ChatGPT API的细节。
 
-Just replace `https://api.openai.com` in your code with `http://localhost:3700` and you're good to go.
+只需要把你的代码里的`https://api.openai.com`替换成`http://localhost:8080`就可以了。
 
-Supported routes:
+支持的路由：
 
 - /models
 - /chat/completions
 - /v1/models
 - /v1/chat/completions
 
-Supported parameters:
+支持的参数：
 
-| Parameter | Note                                                         |
-| --------- | ------------------------------------------------------------ |
-| model     | See `[bot]` section of `config.example.toml`. Model names are mapped to bot nicknames. |
-| messages  | You can use this as in the official API, except for `name`.            |
-| stream    | You can use this as in the official API.                               |
+| 参数     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| model    | 参见`config.example.toml`里的`[bot]`部分。模型名字对应着机器人昵称。 |
+| messages | 你可以像在官方API里一样使用这个参数，除了`name`。            |
+| stream   | 你可以像在官方API里一样使用这个参数。                               |
 
-Other parameters will be ignored.
+其他参数会被忽略。
 
-## Credit
+## 致谢
 
 <https://github.com/ading2210/poe-api>
+<github.com/lwydyby/poe-api>
+<github.com/juzeon/poe-openai-proxy>

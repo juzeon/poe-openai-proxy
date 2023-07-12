@@ -50,7 +50,7 @@ func Setup() {
 		panic(err)
 	}
 	if Conf.Port == 0 {
-		Conf.Port = 3700
+		Conf.Port = 8080
 	}
 	if Conf.RateLimit == 0 {
 		Conf.RateLimit = 10
