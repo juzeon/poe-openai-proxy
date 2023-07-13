@@ -1,4 +1,0 @@
-poe-api
-flask
-flask-sock
-toml
