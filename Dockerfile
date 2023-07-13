@@ -1,9 +1,12 @@
-FROM golang:1.20-alpine
-
+FROM golang:1.20-alpine as builder
 WORKDIR /app
 COPY . .
-
+RUN go mod download
 RUN go build 
 
-EXPOSE 3700
+
+FROM alpine:latest
+WORKDIR /app
+COPY --from=builder /app/poe-openai-proxy .
+EXPOSE 8080
 CMD [ "/app/poe-openai-proxy" ]

@@ -1,6 +1,8 @@
 .idea
 config.toml
+.env
 poe-openai-proxy.exe
+poe-openai-proxy
 test
 start-poe-api.bat
 start-poe-openai-proxy.bat
