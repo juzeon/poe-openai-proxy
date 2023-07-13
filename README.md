@@ -42,7 +42,29 @@ chmod +x poe-openai-proxy
 
 ### Docker一键部署
 
-如果你想使用docker，只需要在按照上面的说明创建好`.env`之后运行`docker-compose up -d`即可。
+- docker run快速开始：
+  ```
+  docker run -d \
+  --name poe-openai-proxy \
+  -p 8080:8080 \
+  -e PORT=8080 \
+  -e TOKENS=12zNTxAdieuXXszMWYt93g%3D%3D \
+  -e SIMULATE_ROLES=2 \
+  -e RATE_LIMIT=10 \
+  -e COOL_DOWN=5 \
+  -e TIMEOUT=60 \
+  caoyunzhou/poe-openai-proxy
+
+  ```
+
+
+- docker-compose部署:
+  ```
+  docker-compose -f docker-compose.yaml up -d
+  ```
+
+- nginx反向代理自己配置
+
 
 ###  使用 Railway 部署
 
