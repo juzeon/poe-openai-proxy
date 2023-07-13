@@ -110,3 +110,11 @@ curl --location 'https://poe.aivvm.com/v1/chat/completions' \
 - <https://github.com/ading2210/poe-api>
 - <https://github.com/juzeon/poe-openai-proxy>
 - <https://github.com/lwydyby/poe-api>
+
+## 参与贡献
+
+感谢所有做过贡献的人!
+
+<a href="https://github.com/caoyunzhou/poe-openai-proxy/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=caoyunzhou/poe-openai-proxy" />
+</a>
