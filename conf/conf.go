@@ -1,21 +1,20 @@
 package conf
 
 import (
-	"os"
-	"strconv"
 	"strings"
-
-	"github.com/joho/godotenv"
 )
 
 type ConfigStruct struct {
-	Port          int
-	Tokens        []string
-	Bot           map[string]string
-	SimulateRoles int
-	RateLimit     int
-	CoolDown      int
-	Timeout       int
+	Port          int               `toml:"port"`
+	Tokens        []string          `toml:"tokens"`
+	Gateway       string            `toml:"gateway"`
+	Bot           map[string]string `toml:"bot"`
+	SimulateRoles int               `toml:"simulate-roles"`
+	RateLimit     int               `toml:"rate-limit"`
+	CoolDown      int               `toml:"cool-down"`
+	Timeout       int               `toml:"timeout"`
+	Key           string            `toml:"key"`
+
 }
 
 type ModelDef struct {
@@ -34,53 +33,38 @@ var Conf ConfigStruct
 
 var Models ModelsResp
 
-func loadEnvVar(key, defaultValue string) string {
-	value, exists := os.LookupEnv(key)
-	if !exists {
-		value = defaultValue
-	}
-	return value
-}
 
-func loadEnvVarAsInt(key string, defaultValue int) int {
-	valueStr := loadEnvVar(key, "")
-	if valueStr == "" {
-		return defaultValue
+func Setup() {
+	//v, err := os.ReadFile("config.toml")
+	//if err != nil {
+	//	panic(err)
+	//}
+	//err = toml.Unmarshal(v, &Conf)
+	//if err != nil {
+	//	panic(err)
+	//}
+	if Conf.Port == 0 {
+		Conf.Port = 8080
+
 	}
 	value, err := strconv.Atoi(valueStr)
 	if err != nil {
 		return defaultValue
 	}
-	return value
-}
 
-func loadEnvVarAsSlice(key string) []string {
-	valueStr := loadEnvVar(key, "")
-	return strings.Split(valueStr, ",")
-}
-
-func Setup() {
-	// Load environment variables from .env file (for development purposes)
-	_ = godotenv.Load()
-
-	Conf.Port = loadEnvVarAsInt("PORT", 8080)
-	Conf.Tokens = loadEnvVarAsSlice("TOKENS")
-	Conf.SimulateRoles = loadEnvVarAsInt("SIMULATE_ROLES", 2)
-	Conf.RateLimit = loadEnvVarAsInt("RATE_LIMIT", 10)
-	Conf.CoolDown = loadEnvVarAsInt("COOL_DOWN", 5)
-	Conf.Timeout = loadEnvVarAsInt("TIMEOUT", 60)
-
-	Conf.Bot = map[string]string{
-		"Sage":                         "capybara",
-		"Claude-instant":               "a2",
-		"Claude-2-100k":                "a2_2",
-		"Claude-instant-100k":          "a2_100k",
-		"gpt-3.5-turbo-0613":           "chinchilla",
-		"gpt-4":                        "beaver",
-		"GPT-4":                        "beaver",
-		"gpt-3.5-turbo-16k-0613":       "agouti",
-		"gpt-4-32k":                    "vizcacha",
-		"Google-PaLM":                  "acouchy",
+	if Conf.Bot == nil {
+		Conf.Bot = map[string]string{
+			  "Sage":                         "capybara",
+			  "Claude-instant":               "a2",
+			  "Claude-2-100k":                "a2_2",
+			  "Claude-instant-100k":          "a2_100k",
+			  "gpt-3.5-turbo-0613":           "chinchilla",
+			  "gpt-4":                        "beaver",
+			  "GPT-4":                        "beaver",
+			  "gpt-3.5-turbo-16k-0613":       "agouti",
+			  "gpt-4-32k":                    "vizcacha",
+			  "Google-PaLM":                  "acouchy",
+		}
 	}
 
 	Models.Object = ""
