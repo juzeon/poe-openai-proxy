@@ -3,15 +3,12 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/juzeon/poe-openai-proxy/conf"
-	"github.com/juzeon/poe-openai-proxy/core"
-	"github.com/juzeon/poe-openai-proxy/global"
 	"github.com/juzeon/poe-openai-proxy/poe"
 	"github.com/juzeon/poe-openai-proxy/router"
 	"strconv"
 )
 
 func main() {
-	global.POE_VP = core.Viper()
 	conf.Setup()
 	poe.Setup()
 	engine := gin.Default()
