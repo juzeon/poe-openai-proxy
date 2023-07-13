@@ -108,7 +108,7 @@ chmod +x poe-openai-proxy
 | gpt-3.5-turbo-0613       | chinchilla |
 | gpt-3.5-turbo-16k-0613   | agouti     |
 | gpt-4                    | beaver     |
-| GPT-4                    | beaver     |
+| gpt-4-0613               | beaver     |
 | gpt-4-32k                | vizcacha   |
 | Google-PaLM              | acouchy    |
 
