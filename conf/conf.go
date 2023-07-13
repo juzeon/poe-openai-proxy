@@ -14,6 +14,7 @@ type ConfigStruct struct {
 	CoolDown      int               `toml:"cool-down"`
 	Timeout       int               `toml:"timeout"`
 	Key           string            `toml:"key"`
+
 }
 
 type ModelDef struct {
@@ -28,15 +29,10 @@ type ModelsResp struct {
 	Data   []ModelDef `json:"data"`
 }
 
-func (c ConfigStruct) GetGatewayWsURL() string {
-	str := strings.ReplaceAll(c.Gateway, "http://", "ws://")
-	str = strings.ReplaceAll(str, "https://", "wss://")
-	return str
-}
-
 var Conf ConfigStruct
 
 var Models ModelsResp
+
 
 func Setup() {
 	//v, err := os.ReadFile("config.toml")
@@ -49,10 +45,13 @@ func Setup() {
 	//}
 	if Conf.Port == 0 {
 		Conf.Port = 8080
+
 	}
-	if Conf.RateLimit == 0 {
-		Conf.RateLimit = 10
+	value, err := strconv.Atoi(valueStr)
+	if err != nil {
+		return defaultValue
 	}
+
 	if Conf.Bot == nil {
 		Conf.Bot = map[string]string{
 			"gpt-3.5-turbo":           "chinchilla",

@@ -1,40 +1,29 @@
 # poe-openai-proxy
 
-A wrapper that lets you use the reverse-engineered Python library `poe-api` as if it was the OpenAI API for ChatGPT. You can connect your favorite OpenAI API based apps to this proxy and enjoy the ChatGPT API for free!
+- [Poe.com](https://poe.com/) 是一个免费的网页应用，让你可以和 GPT 模型聊天。`poe-api` 它反向工程了 `poe.com`，让它可以通过一个 HTTP API 来访问，这个 API 模仿了官方的 OpenAI API for ChatGPT，所以它可以和其他使用 OpenAI API for ChatGPT 的程序兼容。
 
-[Poe.com](https://poe.com/) from Quora is a free web app that lets you chat with GPT models. `poe-api` is a Python library that reverse-engineered `poe.com` so you can use Python to call `poe`. This project is a wrapper around `poe-api` that makes it accessible through an HTTP API, which mimics the official OpenAI API for ChatGPT so it can work with other programs that use OpenAI API for their features.
+## 声明：
 
-[简体中文](README_zh.md)
+- 此项目只发布于 GitHub，基于 MIT 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、讨论群、讨论组等行为。谨防受骗。
 
-## Installation
 
-1. Clone this repository to your local machine:
+## 安装
 
-```bash
-git clone https://github.com/juzeon/poe-openai-proxy.git
+1. 将这个仓库克隆到你的本地机器：
+
+```
+git clone https://github.com/caoyunzhou/poe-openai-proxy.git
 cd poe-openai-proxy/
 ```
 
-2. Install dependencies from requirements.txt:
+2. 在项目的根目录创建配置文件。说明写在注释里：
 
 ```bash
-pip install -r external/requirements.txt
+cp .env.example .env
+vim .env
 ```
 
-3. Create the configuration file in the root folder of the project. Instructions are written in the comments:
-
-```bash
-cp config.example.toml config.toml
-vim config.toml
-```
-
-4. Start the Python backend for `poe-api`:
-
-```bash
-python external/api.py # Running on port 5100
-```
-
-5. Build and start the Go backend:
+3. 构建并启动Go后端：
 
 ```bash
 go build
@@ -42,33 +31,82 @@ chmod +x poe-openai-proxy
 ./poe-openai-proxy
 ```
 
-### Docker support
+### Docker一键部署
 
-If you would like to use docker, just run `docker-compose up -d` after creating `config.toml` according to the instructions above.
+如果你想使用docker，只需要在按照上面的说明创建好`.env`之后运行`docker-compose up -d`即可。
 
-## Usage
+###  使用 Railway 部署
 
-See [OpenAI Document](https://platform.openai.com/docs/api-reference/chat/create) for more details on how to use the ChatGPT API.
+- [注册Railway](https://railway.app?referralCode=CG56Re)
 
-Just replace `https://api.openai.com` in your code with `http://localhost:3700` and you're good to go.
+- [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/nFaU1x)
 
-Supported routes:
+#### Railway 环境变量
+
+| 环境变量名称          | 必填                   | 备注                                                                                               |
+| --------------------- | ---------------------- | -------------------------------------------------------------------------------------------------- |
+| `PORT`                | 必填                   | 默认 `8080`
+| `TOKENS`          | 必填[list]                   | poe-Token密钥                                        |
+| `SIMULATE_ROLES`          | `2`                   | 角色                                                                       |
+| `RATE_LIMIT`      | `10` |     速率[默认为1分钟内每个令牌调用10个api]    |
+| `COOL_DOWN` |   `10`     | 冷却令牌[#冷却几秒钟。同一个令牌在n秒内不能多次使用] |
+| `TIMEOUT`   | `60` |  超时  |
+
+> 注意: `Railway` 修改环境变量会重新 `Deploy`
+
+## 使用
+
+参见[OpenAI文档](https://platform.openai.com/docs/api-reference/chat/create)了解更多关于如何使用ChatGPT API的细节。
+
+只需要把你的代码里的`https://api.openai.com`替换成`http://localhost:8080`或者替换成`https://api.example.com`就可以了。
+
+支持的路由：
 
 - /models
 - /chat/completions
 - /v1/models
 - /v1/chat/completions
 
-Supported parameters:
+支持的models对应列表:
+| 模型名称                     | poe模型名称   |
+| ------------------------ | ---------- |
+| Sage                     | capybara   |
+| Claude-instant           | a2         |
+| Claude-2-100k            | a2_2       |
+| Claude-instant-100k      | a2_100k    |
+| gpt-3.5-turbo-0613       | chinchilla |
+| gpt-3.5-turbo-16k-0613   | agouti     |
+| gpt-4                    | beaver     |
+| GPT-4                    | beaver     |
+| gpt-4-32k                | vizcacha   |
+| Google-PaLM              | acouchy    |
 
-| Parameter | Note                                                         |
-| --------- | ------------------------------------------------------------ |
-| model     | See `[bot]` section of `config.example.toml`. Model names are mapped to bot nicknames. |
-| messages  | You can use this as in the official API, except for `name`.            |
-| stream    | You can use this as in the official API.                               |
+支持的参数：
 
-Other parameters will be ignored.
+| 参数     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| model    | 参见`.env.example`里的`[bot]`部分。模型名字对应着机器人昵称。 |
+| messages | 你可以像在官方API里一样使用这个参数，除了`name`。            |
+| stream   | 你可以像在官方API里一样使用这个参数。                               |
 
-## Credit
+其他参数会被忽略。
 
-<https://github.com/ading2210/poe-api>
+## 配置域名后使用方式
+```
+curl --location 'https://poe.aivvm.com/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--data '{
+  "model": "gpt-4",
+  "messages": [{"role": "user", "content": "你好"}]
+}'
+```
+
+
+## License
+- MIT © [poe-openai-proxy](./license)
+
+## 致谢
+
+- <https://github.com/ading2210/poe-api>
+- <https://github.com/juzeon/poe-openai-proxy>
+- <https://github.com/lwydyby/poe-api>
