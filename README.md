@@ -31,6 +31,15 @@ chmod +x poe-openai-proxy
 ./poe-openai-proxy
 ```
 
+4. POE token 获取方式
+```
+- 在浏览器上登录`Poe.com`，然后打开浏览器的开发工具，在以下菜单中查找p-b cookie的值：
+- Chromium：开发工具>应用程序>Cookie>poe.com
+- Firefox：开发工具>存储>Cookie
+- Safari:开发工具>存储>Cookie
+- 类似于这样的值[ p-b : 12zNTxAdieuXXszMWYt93g%3D%3D]
+```
+
 ### Docker一键部署
 
 如果你想使用docker，只需要在按照上面的说明创建好`.env`之后运行`docker-compose up -d`即可。
