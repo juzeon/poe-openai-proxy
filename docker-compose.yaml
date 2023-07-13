@@ -9,8 +9,10 @@ services:
     environment:
       # 端口
       PORT: 8080
+      # 认证令牌，放在header中适配openai的请求方式
+      AuthKey : sk-123456
       # 多个令牌
-      # TOKENS : mLMU8MMT21nfr0TGxN0i6A%3D%3D,token2,token3
+      # TOKENS : 12zNTxAdieuXXszMWYt93g%3D%3D,token2,token3
       TOKENS : token1,token2,token3
       # 角色
       SIMULATE_ROLES : 2

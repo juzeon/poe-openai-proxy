@@ -16,6 +16,7 @@ type ConfigStruct struct {
 	RateLimit     int
 	CoolDown      int
 	Timeout       int
+	AuthKey		  string
 }
 
 type ModelDef struct {
@@ -65,6 +66,7 @@ func Setup() {
 
 	Conf.Port = loadEnvVarAsInt("PORT", 8080)
 	Conf.Tokens = loadEnvVarAsSlice("TOKENS")
+	Conf.AuthKey = loadEnvVarAsSlice("AuthKey")[0]
 	Conf.SimulateRoles = loadEnvVarAsInt("SIMULATE_ROLES", 2)
 	Conf.RateLimit = loadEnvVarAsInt("RATE_LIMIT", 10)
 	Conf.CoolDown = loadEnvVarAsInt("COOL_DOWN", 5)

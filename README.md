@@ -48,13 +48,13 @@ chmod +x poe-openai-proxy
   --name poe-openai-proxy \
   -p 8080:8080 \
   -e PORT=8080 \
+  -e AuthKey=sk-123456 \
   -e TOKENS=12zNTxAdieuXXszMWYt93g%3D%3D \
   -e SIMULATE_ROLES=2 \
   -e RATE_LIMIT=10 \
-  -e COOL_DOWN=5 \
-  -e TIMEOUT=60 \
+  -e COOL_DOWN=3 \
+  -e TIMEOUT=30 \
   caoyunzhou/poe-openai-proxy
-
   ```
 
 
@@ -76,12 +76,13 @@ chmod +x poe-openai-proxy
 
 | 环境变量名称          | 必填                   | 备注                                                                                               |
 | --------------------- | ---------------------- | -------------------------------------------------------------------------------------------------- |
-| `PORT`                | 必填                   | 默认 `8080`
-| `TOKENS`          | 必填[list]                   | poe-Token密钥                                        |
-| `SIMULATE_ROLES`          | `2`                   | 角色                                                                       |
-| `RATE_LIMIT`      | `10` |     速率[默认为1分钟内每个令牌调用10个api]    |
-| `COOL_DOWN` |   `10`     | 冷却令牌[#冷却几秒钟。同一个令牌在n秒内不能多次使用] |
-| `TIMEOUT`   | `60` |  超时  |
+| `PORT`                | 必填        | 默认 `8080`
+| `AuthKey`             |    必填     |  默认:`sk-123456` , `适配openai的请求，用户自定义的秘钥` |
+| `TOKENS`              | 必填[list]  | poe-Token密钥                                        |
+| `SIMULATE_ROLES`      | `2`        | 角色                                                                       |
+| `RATE_LIMIT`          | `10`       |     速率[默认为1分钟内每个令牌调用10个api]    |
+| `COOL_DOWN`           |   `10`     | 冷却令牌[#冷却几秒钟。同一个令牌在n秒内不能多次使用] |
+| `TIMEOUT`             | `60`       |  超时  |
 
 > 注意: `Railway` 修改环境变量会重新 `Deploy`
 
@@ -89,7 +90,19 @@ chmod +x poe-openai-proxy
 
 参见[OpenAI文档](https://platform.openai.com/docs/api-reference/chat/create)了解更多关于如何使用ChatGPT API的细节。
 
-只需要把你的代码里的`https://api.openai.com`替换成`http://localhost:8080`或者替换成`https://api.example.com`就可以了。
+只需要把你的代码里的`https://api.openai.com`替换成`http://localhost:8080`或者替换成你的域名`https://api.example.com`就可以了。
+
+
+## 配置域名参考访问方式
+```
+curl --location 'https://poe.aivvm.com/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-123456' \
+--data '{
+  "model": "gpt-4",
+  "messages": [{"role": "user", "content": "你好"}]
+}'
+```
 
 支持的路由：
 
@@ -99,7 +112,7 @@ chmod +x poe-openai-proxy
 - /v1/chat/completions
 
 支持的models对应列表:
-| 模型名称                     | poe模型名称   |
+| 模型名称                  | poe模型名称   |
 | ------------------------ | ---------- |
 | Sage                     | capybara   |
 | Claude-instant           | a2         |
@@ -121,16 +134,6 @@ chmod +x poe-openai-proxy
 | stream   | 你可以像在官方API里一样使用这个参数。                               |
 
 其他参数会被忽略。
-
-## 配置域名后使用方式
-```
-curl --location 'https://poe.aivvm.com/v1/chat/completions' \
---header 'Content-Type: application/json' \
---data '{
-  "model": "gpt-4",
-  "messages": [{"role": "user", "content": "你好"}]
-}'
-```
 
 
 ## License
