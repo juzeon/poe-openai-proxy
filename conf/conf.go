@@ -71,17 +71,16 @@ func Setup() {
 	Conf.Timeout = loadEnvVarAsInt("TIMEOUT", 60)
 
 	Conf.Bot = map[string]string{
-		"gpt-3.5-turbo":       "chinchilla",
-		"gpt-4":               "beaver",
-		"gpt-3.5-turbo-0301":  "a2",
-		"gpt-4-32k":           "a2_100k",
-		"gpt-4-0314":          "a2_2",
-		"Sage":                "capybara",
-		"ChatGPT":             "chinchilla",
-		"GPT-4":               "beaver",
-		"Claude-instant":      "a2",
-		"Claude-instant-100k": "a2_100k",
-		"Claude+":             "a2_2",
+		"Sage":                         "capybara",
+		"Claude-instant":               "a2",
+		"Claude-2-100k":                "a2_2",
+		"Claude-instant-100k":          "a2_100k",
+		"gpt-3.5-turbo-0613":           "chinchilla",
+		"gpt-4":                        "beaver",
+		"GPT-4":                        "beaver",
+		"gpt-3.5-turbo-16k-0613":       "agouti",
+		"gpt-4-32k":                    "vizcacha",
+		"Google-PaLM":                  "acouchy",
 	}
 
 	Models.Object = ""

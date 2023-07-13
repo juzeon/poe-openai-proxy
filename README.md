@@ -1,6 +1,11 @@
 # poe-openai-proxy
 
-[Poe.com](https://poe.com/) 是一个免费的网页应用，让你可以和 GPT 模型聊天。`poe-api` 它反向工程了 `poe.com`，让它可以通过一个 HTTP API 来访问，这个 API 模仿了官方的 OpenAI API for ChatGPT，所以它可以和其他使用 OpenAI API for ChatGPT 的程序兼容。
+- [Poe.com](https://poe.com/) 是一个免费的网页应用，让你可以和 GPT 模型聊天。`poe-api` 它反向工程了 `poe.com`，让它可以通过一个 HTTP API 来访问，这个 API 模仿了官方的 OpenAI API for ChatGPT，所以它可以和其他使用 OpenAI API for ChatGPT 的程序兼容。
+
+## 声明：
+
+- 此项目只发布于 GitHub，基于 MIT 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、讨论群、讨论组等行为。谨防受骗。
+
 
 ## 安装
 
@@ -30,11 +35,30 @@ chmod +x poe-openai-proxy
 
 如果你想使用docker，只需要在按照上面的说明创建好`.env`之后运行`docker-compose up -d`即可。
 
+###  使用 Railway 部署
+
+- [注册Railway](https://railway.app?referralCode=CG56Re)
+
+- [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/nFaU1x)
+
+#### Railway 环境变量
+
+| 环境变量名称          | 必填                   | 备注                                                                                               |
+| --------------------- | ---------------------- | -------------------------------------------------------------------------------------------------- |
+| `PORT`                | 必填                   | 默认 `8080`
+| `TOKENS`          | 必填[list]                   | poe-Token密钥                                        |
+| `SIMULATE_ROLES`          | `2`                   | 角色                                                                       |
+| `RATE_LIMIT`      | `10` |     速率[默认为1分钟内每个令牌调用10个api]    |
+| `COOL_DOWN` |   `10`     | 冷却令牌[#冷却几秒钟。同一个令牌在n秒内不能多次使用] |
+| `TIMEOUT`   | `60` |  超时  |
+
+> 注意: `Railway` 修改环境变量会重新 `Deploy`
+
 ## 使用
 
 参见[OpenAI文档](https://platform.openai.com/docs/api-reference/chat/create)了解更多关于如何使用ChatGPT API的细节。
 
-只需要把你的代码里的`https://api.openai.com`替换成`http://localhost:8080`就可以了。
+只需要把你的代码里的`https://api.openai.com`替换成`http://localhost:8080`或者替换成`https://api.example.com`就可以了。
 
 支持的路由：
 
@@ -42,6 +66,20 @@ chmod +x poe-openai-proxy
 - /chat/completions
 - /v1/models
 - /v1/chat/completions
+
+支持的models对应列表:
+| 模型名称                     | poe模型名称   |
+| ------------------------ | ---------- |
+| Sage                     | capybara   |
+| Claude-instant           | a2         |
+| Claude-2-100k            | a2_2       |
+| Claude-instant-100k      | a2_100k    |
+| gpt-3.5-turbo-0613       | chinchilla |
+| gpt-3.5-turbo-16k-0613   | agouti     |
+| gpt-4                    | beaver     |
+| GPT-4                    | beaver     |
+| gpt-4-32k                | vizcacha   |
+| Google-PaLM              | acouchy    |
 
 支持的参数：
 
@@ -63,6 +101,9 @@ curl --location 'https://poe.aivvm.com/v1/chat/completions' \
 }'
 ```
 
+
+## License
+- MIT © [poe-openai-proxy](./license)
 
 ## 致谢
 
