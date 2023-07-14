@@ -1,5 +1,11 @@
 # poe-openai-proxy
 
+![GitHub repo size](https://img.shields.io/github/repo-size/caoyunzhou/poe-openai-proxy)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/caoyunzhou/poe-openai-proxy/latest)
+![GitHub go.mod Go version (branch & subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/caoyunzhou/poe-openai-proxy/master)
+![Docker Pulls](https://img.shields.io/docker/pulls/caoyunzhou/poe-openai-proxy)
+[![GitHub Repo stars](https://img.shields.io/github/stars/caoyunzhou/poe-openai-proxy?style=social)](https://github.com/caoyunzhou/poe-openai-proxy/stargazers)
+
 - [Poe.com](https://poe.com/) 是一个免费的网页应用，让你可以和 GPT 模型聊天。`poe-api` 它反向工程了 `poe.com`，让它可以通过一个 HTTP API 来访问，这个 API 模仿了官方的 OpenAI API for ChatGPT，所以它可以和其他使用 OpenAI API for ChatGPT 的程序兼容。
 
 ## 声明：
@@ -152,3 +158,9 @@ curl --location 'https://poe.aivvm.com/v1/chat/completions' \
 <a href="https://github.com/caoyunzhou/poe-openai-proxy/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=caoyunzhou/poe-openai-proxy" />
 </a>
+
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=caoyunzhou/poe-openai-proxy&type=Date)](https://star-history.com/#caoyunzhou/poe-openai-proxy&Date)
