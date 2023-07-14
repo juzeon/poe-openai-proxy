@@ -12,7 +12,6 @@
 
 - 此项目只发布于 GitHub，基于 MIT 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、讨论群、讨论组等行为。谨防受骗。
 
-
 ## 安装
 
 1. 将这个仓库克隆到你的本地机器：
@@ -27,6 +26,7 @@ cd poe-openai-proxy/
 ```bash
 cp .env.example .env
 vim .env
+source .env
 ```
 
 3. 构建并启动Go后端：
@@ -56,7 +56,7 @@ chmod +x poe-openai-proxy
   -e PORT=8080 \
   -e AuthKey=sk-123456 \
   -e TOKENS=12zNTxAdieuXXszMWYt93g%3D%3D \
-  -e SIMULATE_ROLES=2 \
+  -e SIMULATE_ROLES=0 \
   -e RATE_LIMIT=10 \
   -e COOL_DOWN=10 \
   -e TIMEOUT=60 \
@@ -71,7 +71,7 @@ chmod +x poe-openai-proxy
   -e PORT=8080 \
   -e AuthKey=sk-123456 \
   -e TOKENS="12zNTxAdieuXXszMWYt93g%3D%3D,13zNTxAdieuXXszMWYt93g%3D%3D,14zNTxAdieuXXszMWYt93g%3D%3D" \
-  -e SIMULATE_ROLES=2 \
+  -e SIMULATE_ROLES=0 \
   -e RATE_LIMIT=10 \
   -e COOL_DOWN=10 \
   -e TIMEOUT=60 \
@@ -99,7 +99,7 @@ chmod +x poe-openai-proxy
 | `PORT`                | 必填        | 默认 `8080`
 | `AuthKey`             | 必填        | 默认:`sk-123456` , `适配openai的请求，用户自定义的秘钥，放在Authorization header里面做认证` |
 | `TOKENS`              | 必填[list]  | poe-Token密钥[token1,token2,token3]                                        |
-| `SIMULATE_ROLES`      | `2`        | 角色                                                                       |
+| `SIMULATE_ROLES`      | `0`        | 角色                                                                       |
 | `RATE_LIMIT`          | `10`       | 速率[默认为1分钟内每个令牌调用10个api]    |
 | `COOL_DOWN`           | `10`       | 冷却令牌[#冷却几秒钟。同一个令牌在n秒内不能多次使用] |
 | `TIMEOUT`             | `60`       | 超时  |

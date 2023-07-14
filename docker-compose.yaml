@@ -4,6 +4,7 @@ services:
   poe-openai-proxy:
     container_name: poe-openai-proxy
     image: caoyunzhou/poe-openai-proxy
+    restart: always 
     ports:
       - "8080:8080"
     environment:
@@ -15,7 +16,7 @@ services:
       # TOKENS : 12zNTxAdieuXXszMWYt93g%3D%3D,token2,token3
       TOKENS : token1,token2,token3
       # 角色
-      SIMULATE_ROLES : 2
+      SIMULATE_ROLES : 0
       # 速率[默认为1分钟内每个令牌调用10个api]
       RATE_LIMIT : 10
       # 冷却令牌[#冷却几秒钟。同一个令牌在n秒内不能多次使用]
