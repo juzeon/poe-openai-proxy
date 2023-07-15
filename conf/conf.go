@@ -74,14 +74,20 @@ func Setup() {
 
 	Conf.Bot = map[string]string{
 		"sage":                         "capybara",
+		"gpt-3.5-turbo":				"capybara",
+		"gpt-3.5-turbo-0301":			"capybara",
+		"gpt-3.5-turbo-0613":           "chinchilla",
+		"gpt-3.5-turbo-16k":			"agouti",
+		"gpt-3.5-turbo-16k-0613":       "agouti",
+		"gpt-4":                        "beaver",
+		"gpt-4-0314":                   "beaver",
+		"gpt-4-0613":                   "beaver",
+		"gpt-4-32k":                    "vizcacha",
+		"gpt-4-32k-0314":				"vizcacha",
+		"gpt-4-32k-0613":				"vizcacha",
 		"claude-instant":               "a2",
 		"claude-2-100k":                "a2_2",
 		"claude-instant-100k":          "a2_100k",
-		"gpt-3.5-turbo-0613":           "chinchilla",
-		"gpt-3.5-turbo-16k-0613":       "agouti",
-		"gpt-4":                        "beaver",
-		"gpt-4-0613":                   "beaver",
-		"gpt-4-32k":                    "vizcacha",
 		"google-palm":                  "acouchy",
 	}
 

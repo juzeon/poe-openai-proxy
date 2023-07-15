@@ -10,7 +10,7 @@
 
 ## 声明：
 
-- 此项目只发布于 GitHub，基于 MIT 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、讨论群、讨论组等行为。谨防受骗。
+- 此项目只发布于 GitHub，基于 GNU 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、讨论群、讨论组等行为。谨防受骗。
 
 ## 安装
 
@@ -90,7 +90,7 @@ chmod +x poe-openai-proxy
 
 - [注册Railway](https://railway.app?referralCode=CG56Re)
 
-- [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/nFaU1x)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/nFaU1x?referralCode=CG56Re)
 
 #### Railway 环境变量
 
@@ -112,7 +112,7 @@ chmod +x poe-openai-proxy
 
 只需要把你的代码里的`https://api.openai.com`替换成`http://localhost:8080`或者替换成你的域名`https://api.example.com`就可以了。
 
-## IP参考访问方式[127.0.0.1替换成你的IP]
+#### IP参考访问方式[127.0.0.1替换成你的IP]
 ```
 curl --location 'http://127.0.0.1:8080/v1/chat/completions' \
 --header 'Content-Type: application/json' \
@@ -123,7 +123,7 @@ curl --location 'http://127.0.0.1:8080/v1/chat/completions' \
 }'
 ```
 
-## 配置域名参考访问方式
+#### 配置域名参考访问方式
 ```
 curl --location 'https://poe.aivvm.com/v1/chat/completions' \
 --header 'Content-Type: application/json' \
@@ -134,32 +134,39 @@ curl --location 'https://poe.aivvm.com/v1/chat/completions' \
 }'
 ```
 
-支持的路由：
+#### 支持的路由：
 
 - /models
 - /chat/completions
 - /v1/models
 - /v1/chat/completions
 
-支持的models对应列表:
-| 模型名称                  | poe模型名称  |
-| ------------------------ | ---------- |
-| sage                     | capybara   |
-| claude-instant           | a2         |
-| claude-2-100k            | a2_2       |
-| claude-instant-100k      | a2_100k    |
-| gpt-3.5-turbo-0613       | chinchilla |
-| gpt-3.5-turbo-16k-0613   | agouti     |
-| gpt-4                    | beaver     |
-| gpt-4-0613               | beaver     |
-| gpt-4-32k                | vizcacha   |
-| google-palm              | acouchy    |
+#### 支持的models对应列表:
 
-支持的参数：
+| 模型名称              | poe模型名称  |
+| -------------------- | ---------- |
+| sage                 | capybara   |
+| gpt-3.5-turbo        | capybara   |
+| gpt-3.5-turbo-0301   | capybara   |
+| gpt-3.5-turbo-0613   | chinchilla |
+| gpt-3.5-turbo-16k    | agouti     |
+| gpt-3.5-turbo-16k-0613 | agouti    |
+| gpt-4                | beaver     |
+| gpt-4-0314           | beaver     |
+| gpt-4-0613           | beaver     |
+| gpt-4-32k            | vizcacha   |
+| gpt-4-32k-0314       | vizcacha   |
+| gpt-4-32k-0613       | vizcacha   |
+| claude-instant       | a2         |
+| claude-2-100k        | a2_2       |
+| claude-instant-100k  | a2_100k    |
+| google-palm          | acouchy    |
 
+
+#### 支持的参数：
 | 参数     | 说明                                                         |
 | -------- | ------------------------------------------------------------ |
-| model    | 参见`.env.example`里的`[bot]`部分。模型名字对应着机器人昵称。 |
+| model    | 参见`支持的模型对应列表`部分。模型名字对应着POE机器人昵称。 |
 | messages | 你可以像在官方API里一样使用这个参数，除了`name`。            |
 | stream   | 你可以像在官方API里一样使用这个参数。                               |
 
@@ -167,7 +174,7 @@ curl --location 'https://poe.aivvm.com/v1/chat/completions' \
 
 
 ## License
-- MIT © [poe-openai-proxy](./license)
+- GNU © [poe-openai-proxy](./license)
 
 ## 致谢
 
