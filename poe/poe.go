@@ -15,13 +15,43 @@ var clientLock sync.Mutex
 var clientIx = 0
 
 func Setup() {
+	seen := make(map[string]bool)
+	var correctTokens []string
+	var errorTokens []string
+
 	for _, token := range conf.Conf.Tokens {
-		client, err := NewClient(token)
-		if err != nil {
-			panic(err)
+		if seen[token] {
+			continue
 		}
-		clients = append(clients, client)
+		seen[token] = true
+
+		// 使用匿名函数来捕获可能的 panic
+		func() {
+			// 在延迟函数中调用 recover 来捕获 panic
+			defer func() {
+				if r := recover(); r != nil {
+					util.Logger.Error("Recovered in NewClient: %v\n", r)
+					errorTokens = append(errorTokens, token)
+				}
+			}()
+
+			client, err := NewClient(token)
+
+			if err != nil {
+				util.Logger.Error("Error creating client with token %s: %v", token, err)
+				errorTokens = append(errorTokens, token)
+				return
+			}
+
+			correctTokens = append(correctTokens, token)
+			clients = append(clients, client)
+		}()
 	}
+
+	// Log the correct and error tokens as lists
+	util.Logger.Info("Success tokens:", correctTokens)
+	util.Logger.Error("Error tokens:", errorTokens)
+
 }
 
 type Client struct {

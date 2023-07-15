@@ -15,6 +15,11 @@ import (
 func Setup(engine *gin.Engine) {
 	getModels := func(c *gin.Context) {
 		SetCORS(c)
+		if c.Request.Header.Get("Authorization") != "Bearer " + conf.Conf.AuthKey {
+			c.JSON(401, "unauthorized")
+			c.Abort()
+			return
+		}
 		c.JSON(http.StatusOK, conf.Models)
 	}
 
