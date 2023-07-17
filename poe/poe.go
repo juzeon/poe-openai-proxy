@@ -15,25 +15,32 @@ var clients []*Client
 var clientLock sync.Mutex
 var clientIx = 0
 
+var correctTokens []string
+var errorTokens []string
+func createClient(token string  ){
+	defer func() {
+		if r := recover(); r != nil {
+			util.Logger.Error("Recovered in NewClient: %v\n", r)
+			errorTokens = append(errorTokens, token)
+		}
+	}()
 
+	client, err := NewClient(token)
 
-// func removeClient(all []*Client, cli *Client) []int {
-// 	result := []*Client{}
+	if err != nil {
+		util.Logger.Error("Error creating client with token %s: %v", token, err)
+		errorTokens = append(errorTokens, token)
+		return
+	}
 
-// 	for _, c := range all {
-// 		if cli != c {
-// 			result = append(result, c)
-// 		}
-// 	}
-
-// 	return result
-// }
+	correctTokens = append(correctTokens, token)
+	clients = append(clients, client)
+}
 
 
 func Setup() {
 	seen := make(map[string]bool)
-	var correctTokens []string
-	var errorTokens []string
+
 
 	for _, token := range conf.Conf.Tokens {
 		if seen[token] {
@@ -41,27 +48,28 @@ func Setup() {
 		}
 		seen[token] = true
 
+		go createClient(token )
 		// 使用匿名函数来捕获可能的 panic
-		func() {
-			// 在延迟函数中调用 recover 来捕获 panic
-			defer func() {
-				if r := recover(); r != nil {
-					util.Logger.Error("Recovered in NewClient: %v\n", r)
-					errorTokens = append(errorTokens, token)
-				}
-			}()
+		//    func() {
+		// 	// 在延迟函数中调用 recover 来捕获 panic
+		// 	defer func() {
+		// 		if r := recover(); r != nil {
+		// 			util.Logger.Error("Recovered in NewClient: %v\n", r)
+		// 			errorTokens = append(errorTokens, token)
+		// 		}
+		// 	}()
 
-			client, err := NewClient(token)
+		// 	client, err := NewClient(token)
 
-			if err != nil {
-				util.Logger.Error("Error creating client with token %s: %v", token, err)
-				errorTokens = append(errorTokens, token)
-				return
-			}
+		// 	if err != nil {
+		// 		util.Logger.Error("Error creating client with token %s: %v", token, err)
+		// 		errorTokens = append(errorTokens, token)
+		// 		return
+		// 	}
 
-			correctTokens = append(correctTokens, token)
-			clients = append(clients, client)
-		}()
+		// 	correctTokens = append(correctTokens, token)
+		// 	clients = append(clients, client)
+		// }()
 	}
 
 	// Log the correct and error tokens as lists
