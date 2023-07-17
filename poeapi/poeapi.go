@@ -625,6 +625,8 @@ func (c *Client) wsRunThread() {
 	c.wsConn = conn
 	c.wsConnected = true
 
+	log.Println("WebSocket connected.")
+
 	for {
 		_, message, err := c.wsConn.ReadMessage()
 		if err != nil {
@@ -632,6 +634,9 @@ func (c *Client) wsRunThread() {
 			c.wsConnected = false
 			return
 		}
+
+		log.Printf("Received WebSocket message: %s", message)
+
 		c.onMessage(message)
 	}
 }
@@ -647,7 +652,12 @@ func (c *Client) connectWs() {
 
 func (c *Client) disconnectWs() {
 	if c.wsConn != nil {
-		c.wsConn.Close()
+		err := c.wsConn.Close()
+		if err != nil {
+			log.Printf("Error closing WebSocket connection: %v", err)
+		} else {
+			log.Println("WebSocket connection closed.")
+		}
 	}
 	c.wsConnected = false
 }
