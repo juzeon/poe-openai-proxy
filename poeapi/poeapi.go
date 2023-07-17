@@ -635,7 +635,7 @@ func (c *Client) wsRunThread() {
 			return
 		}
 
-		log.Printf("Received WebSocket message: %s", message)
+		// log.Printf("Received WebSocket message: %s", message)
 
 		c.onMessage(message)
 	}
