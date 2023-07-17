@@ -15,76 +15,55 @@ var clients []*Client
 var clientLock sync.Mutex
 var clientIx = 0
 
-var correctTokens []string
-var errorTokens []string
 
-var tokenMutex  sync.Mutex
- 
 
-func createClient(token string, wg *sync.WaitGroup  ){
-	defer func() {
-		if r := recover(); r != nil {
-			util.Logger.Error("Recovered in NewClient: %v\n", r)
-			errorTokens = append(errorTokens, token)
-		}
-	}()
+// func removeClient(all []*Client, cli *Client) []int {
+// 	result := []*Client{}
 
-	client, err := NewClient(token)
+// 	for _, c := range all {
+// 		if cli != c {
+// 			result = append(result, c)
+// 		}
+// 	}
 
-	if err != nil {
-		util.Logger.Error("Error creating client with token %s: %v", token, err)
-		tokenMutex.Lock()
-		errorTokens = append(errorTokens, token)
-		tokenMutex.Unlock()
-		return
-	}
-
-	tokenMutex.Lock()
-	correctTokens = append(correctTokens, token)
-	clients = append(clients, client)
-	tokenMutex.Unlock()
-
-	wg.Done()
-}
+// 	return result
+// }
 
 
 func Setup() {
-
-	wg := sync.WaitGroup{}
 	seen := make(map[string]bool)
-	wg.Add(len(conf.Conf.Tokens))
+	var correctTokens []string
+	var errorTokens []string
 
 	for _, token := range conf.Conf.Tokens {
 		if seen[token] {
-			wg.Done()
 			continue
 		}
 		seen[token] = true
 
-		go createClient(token , &wg )
 		// 使用匿名函数来捕获可能的 panic
-		//    func() {
-		// 	// 在延迟函数中调用 recover 来捕获 panic
-		// 	defer func() {
-		// 		if r := recover(); r != nil {
-		// 			util.Logger.Error("Recovered in NewClient: %v\n", r)
-		// 			errorTokens = append(errorTokens, token)
-		// 		}
-		// 	}()
+		func() {
+			// 在延迟函数中调用 recover 来捕获 panic
+			defer func() {
+				if r := recover(); r != nil {
+					util.Logger.Error("Recovered in NewClient: %v\n", r)
+					errorTokens = append(errorTokens, token)
+				}
+			}()
 
-		// 	client, err := NewClient(token)
+			client, err := NewClient(token)
 
-		// 	if err != nil {
-		// 		util.Logger.Error("Error creating client with token %s: %v", token, err)
-		// 		errorTokens = append(errorTokens, token)
-		// 		return
-		// 	}
+			if err != nil {
+				util.Logger.Error("Error creating client with token %s: %v", token, err)
+				errorTokens = append(errorTokens, token)
+				return
+			}
 
-		// 	correctTokens = append(correctTokens, token)
-		// 	clients = append(clients, client)
-		// }()
+			correctTokens = append(correctTokens, token)
+			clients = append(clients, client)
+		}()
 	}
-	wg.Wait()
+
 	// Log the correct and error tokens as lists
 	util.Logger.Info("Success tokens:", correctTokens)
 	util.Logger.Error("Error tokens:", errorTokens)
