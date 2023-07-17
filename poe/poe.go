@@ -56,6 +56,7 @@ func Setup() {
 
 	for _, token := range conf.Conf.Tokens {
 		if seen[token] {
+			wg.Done()
 			continue
 		}
 		seen[token] = true
