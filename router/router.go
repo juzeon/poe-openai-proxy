@@ -5,9 +5,9 @@ import (
 	"io"
 	"net/http"
 	"time"
-	"poeproxy/conf"
-	"poeproxy/poe"
-	"poeproxy/util"
+	"github.com/juzeon/poe-openai-proxy/conf"
+	"github.com/juzeon/poe-openai-proxy/poe"
+	"github.com/juzeon/poe-openai-proxy/util"
 	"github.com/gin-gonic/gin"
 
 )
@@ -77,6 +77,8 @@ func Setup(engine *gin.Engine) {
 	engine.OPTIONS("/chat/completions", optionsCompletions)
 	engine.OPTIONS("/v1/chat/completions", optionsCompletions)
 }
+
+
 func Stream(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 	c.Writer.Header().Set("Content-Type", "text/event-stream")
 	c.Writer.Header().Set("Cache-Control", "no-cache")

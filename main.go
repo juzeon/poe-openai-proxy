@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"poeproxy/conf"
-	"poeproxy/poe"
-	"poeproxy/router"
+	"github.com/juzeon/poe-openai-proxy/conf"
+	"github.com/juzeon/poe-openai-proxy/poe"
+	"github.com/juzeon/poe-openai-proxy/router"
 	"strconv"
 	 
 )

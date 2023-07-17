@@ -84,6 +84,7 @@ func (c *Client) SendMessage(chatbot, message string, withChatBreak bool, timeou
 			return nil, errors.New("timed out waiting for other messages to send")
 		}
 	}
+
 	log.Printf("Sending message to %s: %s", chatbot, message)
 
 	if !c.wsConnected {
@@ -628,6 +629,7 @@ func (c *Client) wsRunThread() {
 		_, message, err := c.wsConn.ReadMessage()
 		if err != nil {
 			c.onWsError(err)
+			c.wsConnected = false
 			return
 		}
 		c.onMessage(message)

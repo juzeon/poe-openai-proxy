@@ -4,10 +4,10 @@ import (
 	"errors"
 	"sync"
 	"time"
-	"poeproxy/conf"
+	"github.com/juzeon/poe-openai-proxy/conf"
  
-	"poeproxy/util"
-	"poeproxy/poeapi"
+	"github.com/juzeon/poe-openai-proxy/util"
+	"github.com/juzeon/poe-openai-proxy/poeapi"
 	// poeapi "github.com/lwydyby/poe-api"
 )
 
