@@ -4,15 +4,31 @@ import (
 	"errors"
 	"sync"
 	"time"
-
-	"github.com/juzeon/poe-openai-proxy/conf"
-	"github.com/juzeon/poe-openai-proxy/util"
-	poe_api "github.com/lwydyby/poe-api"
+	"poeproxy/conf"
+ 
+	"poeproxy/util"
+	"poeproxy/poeapi"
+	// poeapi "github.com/lwydyby/poe-api"
 )
 
 var clients []*Client
 var clientLock sync.Mutex
 var clientIx = 0
+
+
+
+// func removeClient(all []*Client, cli *Client) []int {
+// 	result := []*Client{}
+
+// 	for _, c := range all {
+// 		if cli != c {
+// 			result = append(result, c)
+// 		}
+// 	}
+
+// 	return result
+// }
+
 
 func Setup() {
 	seen := make(map[string]bool)
@@ -56,14 +72,14 @@ func Setup() {
 
 type Client struct {
 	Token  string
-	client *poe_api.Client
+	client *poeapi.Client
 	Usage  []time.Time
 	Lock   bool
 }
 
 func NewClient(token string) (*Client, error) {
 	util.Logger.Info("registering client: " + token)
-	client := poe_api.NewClient(token, nil)
+	client := poeapi.NewClient(token, nil)
 	return &Client{Token: token, Usage: nil, Lock: false, client: client}, nil
 }
 func (c *Client) getContentToSend(messages []Message) string {
@@ -101,6 +117,8 @@ func (c *Client) getContentToSend(messages []Message) string {
 	util.Logger.Debug("Generated content to send: " + content)
 	return content
 }
+
+
 func (c *Client) Stream(messages []Message, model string) (<-chan string, error) {
 	channel := make(chan string, 1024)
 	content := c.getContentToSend(messages)
@@ -120,13 +138,15 @@ func (c *Client) Stream(messages []Message, model string) (<-chan string, error)
 				channel <- "\n\n[ERROR] " + err.(error).Error()
 			}
 		}()
-		for message := range poe_api.GetTextStream(resp) {
+		for message := range poeapi.GetTextStream(resp) {
 			channel <- message
 		}
 		channel <- "[DONE]"
 	}()
 	return channel, nil
 }
+
+
 func (c *Client) Ask(messages []Message, model string) (*Message, error) {
 	content := c.getContentToSend(messages)
 
@@ -138,14 +158,17 @@ func (c *Client) Ask(messages []Message, model string) (*Message, error) {
 
 	resp, err := c.client.SendMessage(bot, content, true, time.Duration(conf.Conf.Timeout)*time.Second)
 	if err != nil {
+	
 		return nil, err
 	}
 	return &Message{
 		Role:    "assistant",
-		Content: poe_api.GetFinalResponse(resp),
+		Content: poeapi.GetFinalResponse(resp),
 		Name:    "",
 	}, nil
 }
+
+
 func (c *Client) Release() {
 	clientLock.Lock()
 	defer clientLock.Unlock()

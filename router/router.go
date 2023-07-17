@@ -5,11 +5,11 @@ import (
 	"io"
 	"net/http"
 	"time"
-
+	"poeproxy/conf"
+	"poeproxy/poe"
+	"poeproxy/util"
 	"github.com/gin-gonic/gin"
-	"github.com/juzeon/poe-openai-proxy/conf"
-	"github.com/juzeon/poe-openai-proxy/poe"
-	"github.com/juzeon/poe-openai-proxy/util"
+
 )
 
 func Setup(engine *gin.Engine) {

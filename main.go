@@ -2,10 +2,11 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/juzeon/poe-openai-proxy/conf"
-	"github.com/juzeon/poe-openai-proxy/poe"
-	"github.com/juzeon/poe-openai-proxy/router"
+	"poeproxy/conf"
+	"poeproxy/poe"
+	"poeproxy/router"
 	"strconv"
+	 
 )
 
 func main() {
