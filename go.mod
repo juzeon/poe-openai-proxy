@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.9.0
-	github.com/lwydyby/poe-api v1.0.2
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
 	github.com/pelletier/go-toml/v2 v2.0.7
 	github.com/stretchr/testify v1.8.2

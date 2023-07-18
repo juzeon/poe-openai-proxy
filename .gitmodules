@@ -1,0 +1,3 @@
+[submodule "poe-api"]
+	path = poe-api
+	url = https://github.com/lwydyby/poe-api.git
