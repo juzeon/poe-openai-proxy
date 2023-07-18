@@ -13,10 +13,11 @@ import (
 var clients []*Client
 var clientLock sync.Mutex
 var clientIx = 0
+var invalidError *poe_api.InvalidToken
 
 func Setup() {
-	for _, token := range conf.Conf.Tokens {
-		client, err := NewClient(token)
+	for i, token := range conf.Conf.Tokens {
+		client, err := NewClient(i, token)
 		if err != nil {
 			panic(err)
 		}
@@ -29,12 +30,13 @@ type Client struct {
 	client *poe_api.Client
 	Usage  []time.Time
 	Lock   bool
+	index  int
 }
 
-func NewClient(token string) (*Client, error) {
+func NewClient(i int, token string) (*Client, error) {
 	util.Logger.Info("registering client: " + token)
 	client := poe_api.NewClient(token, nil)
-	return &Client{Token: token, Usage: nil, Lock: false, client: client}, nil
+	return &Client{index: i, Token: token, Usage: nil, Lock: false, client: client}, nil
 }
 func (c *Client) getContentToSend(messages []Message) string {
 	leadingMap := map[string]string{
@@ -72,6 +74,13 @@ func (c *Client) getContentToSend(messages []Message) string {
 	return content
 }
 func (c *Client) Stream(messages []Message, model string) (<-chan string, error) {
+	defer func() {
+		if err := recover(); err != nil {
+			if errors.As(err.(error), &invalidError) {
+				removeClient(c)
+			}
+		}
+	}()
 	channel := make(chan string, 1024)
 	content := c.getContentToSend(messages)
 	bot, ok := conf.Conf.Bot[model]
@@ -98,6 +107,13 @@ func (c *Client) Stream(messages []Message, model string) (<-chan string, error)
 	return channel, nil
 }
 func (c *Client) Ask(messages []Message, model string) (*Message, error) {
+	defer func() {
+		if err := recover(); err != nil {
+			if errors.As(err.(error), &invalidError) {
+				removeClient(c)
+			}
+		}
+	}()
 	content := c.getContentToSend(messages)
 
 	bot, ok := conf.Conf.Bot[model]
@@ -120,6 +136,13 @@ func (c *Client) Release() {
 	clientLock.Lock()
 	defer clientLock.Unlock()
 	c.Lock = false
+}
+
+func removeClient(client *Client) {
+	clientLock.Lock()
+	defer clientLock.Unlock()
+	util.Logger.Error("remove client: " + client.Token)
+	clients = append(clients[:client.index], clients[client.index+1:]...)
 }
 
 func GetClient() (*Client, error) {
