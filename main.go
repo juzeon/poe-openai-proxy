@@ -4,7 +4,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/juzeon/poe-openai-proxy/conf"
 	"github.com/juzeon/poe-openai-proxy/poe"
@@ -21,7 +20,6 @@ func main() {
 	_, certErr := os.Stat("ssl/cert.pem")
 	_, keyErr := os.Stat("ssl/key.pem")
 
-	engine.Use(cors.Default())
 	if certErr == nil && keyErr == nil {
 		// SSL 证书和私钥文件都存在，启动 HTTPS 服务器
 		err := engine.RunTLS(":"+strconv.Itoa(conf.Conf.Port), "ssl/cert.pem", "ssl/key.pem")

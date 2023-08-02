@@ -157,8 +157,8 @@ func Ask(c *gin.Context, req poe.CompletionRequest, client *poe.Client) {
 
 func SetCORS(c *gin.Context) {
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-	c.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
-	c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	c.Writer.Header().Set("Access-Control-Allow-Headers", "*")
+	c.Writer.Header().Set("Access-Control-Allow-Methods", "*")
 	c.Writer.Header().Set("Access-Control-Max-Age", "86400")
 	c.Writer.Header().Set("Content-Type", "application/json")
 }
