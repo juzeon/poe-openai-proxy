@@ -22,7 +22,7 @@ pip install -r external/requirements.txt
 3. 在项目的根目录创建配置文件。说明写在注释里：
 
 ```bash
-cp config.example.toml comfig.toml
+cp config.example.toml config.toml
 vim config.toml
 ```
 
